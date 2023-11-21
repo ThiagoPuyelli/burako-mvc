@@ -10,4 +10,4 @@ combinacion: tiene que ser 'combinacion (todos los indices de las fichas con las
 
 agregar: es para agregar una ficha a una combinacion ya existente el cual es 'agregar (indice de combinacion) (indice de ficha a poner)'
 
- 
+ ![UML](https://github.com/ThiagoPuyelli/burako-mvc/blob/main/Burako.png?raw=true)
