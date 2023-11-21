@@ -30,7 +30,6 @@ public class ConsoleGUI extends VistaPlay implements IVista  {
         textArea = new JTextArea(15, 40);
         textArea.setEditable(false);
         JScrollPane scrollPane = new JScrollPane(textArea);
-        textArea.setText("Ingrese 'empezar' para iniciar la partida");
 
         JTextField inputField = new JTextField(20);
         JButton sendButton = new JButton("Enviar");
@@ -46,17 +45,7 @@ public class ConsoleGUI extends VistaPlay implements IVista  {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String inputText = inputField.getText();
-                if (!inicioPartida) {
-                    if (inputText.equals("empezar")) {
-                        if (!controlador.getStart()) {
-                            controlador.iniciarPartida();
-                            inicioPartida = true;
-                        } else {
-                            textArea.append("\n La partida ya comenzo");
-                        }
-                    }
-                } else {
-                    if (!terminaPartida) {
+                    if (!terminaPartida && inicioPartida) {
                         if (inputText.startsWith("agarrar")) {
                             if (controlador.getEstadoTurno() == 2) {
                                 String sub = "agarrar ";
@@ -125,7 +114,6 @@ public class ConsoleGUI extends VistaPlay implements IVista  {
                             }
                         }
                     }
-                }
                 inputField.setText("");
             }
         });

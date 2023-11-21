@@ -51,14 +51,14 @@ public class VistaNombre extends JFrame {
                 } else {
                     Jugador jugador = new Jugador(nombre);
                     EquipoSolo equipo = new EquipoSolo(jugador);
-                    tablero.setEquipos(equipo);
                     Controlador controlador = new Controlador(tablero);
                     ConsoleGUI consola = new ConsoleGUI(controlador);
                     controlador.setJugador(jugador);
                     controlador.setVista(consola);
-                    tablero.agregarObservador(controlador);
                     consola.iniciar();
                     setVisible(false);
+                    tablero.agregarObservador(controlador);
+                    tablero.setEquipos(equipo);
                 }
             }
         });
