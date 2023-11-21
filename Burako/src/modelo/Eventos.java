@@ -1,0 +1,5 @@
+package modelo;
+
+public enum Eventos {
+    INICIAR_PARTIDA, ACTUALIZAR_PARTIDA, SET_MUERTO, TERMINAR_PARTIDA
+}
