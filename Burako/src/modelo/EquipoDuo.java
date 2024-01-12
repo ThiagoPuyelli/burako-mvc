@@ -3,12 +3,11 @@ package modelo;
 import java.util.ArrayList;
 
 public class EquipoDuo extends Equipo {
-    private Jugador jugador1;
     private Jugador jugador2;
     private int turnoJugador = 0;
 
     public EquipoDuo (Jugador jugador1, Jugador jugador2) {
-        this.jugador1 = jugador1;
+        super(jugador1);
         this.jugador2 = jugador2;
     }
 
@@ -29,36 +28,6 @@ public class EquipoDuo extends Equipo {
             return jugador1;
         } else {
             return jugador2;
-        }
-    }
-
-    public void agregarFichas (ArrayList<Ficha> fichas) {
-        Jugador jugador = jugadorEnTurno();
-        ArrayList<Ficha> Jfichas = jugador.getFichas();
-        Jfichas.addAll(fichas);
-        jugador.setFichas(Jfichas);
-    }
-
-    public void agregarFichas (Ficha ficha) {
-        Jugador jugador = jugadorEnTurno();
-        ArrayList<Ficha> Jfichas = jugador.getFichas();
-        Jfichas.add(ficha);
-        jugador.setFichas(Jfichas);
-    }
-
-    public void agarrarPozo(int id, ArrayList<Ficha> pozo) {
-        Jugador jugador = jugadorEnTurno();
-        if (jugador.getId() == id && jugador.getEstadoTurno() == 2) {
-            agregarFichas(pozo);
-            jugador.setEstadoTurno(1);
-        }
-    }
-
-    public void agarrarMazo (int id, Ficha ficha) {
-        Jugador jugador = jugadorEnTurno();
-        if (jugador.getId() == id && jugador.getEstadoTurno() == 2) {
-            agregarFichas(ficha);
-            jugador.setEstadoTurno(1);
         }
     }
 
@@ -93,32 +62,6 @@ public class EquipoDuo extends Equipo {
         } else {
             return jugador1.soltarFicha(f);
         }
-    }
-
-    public void combinacion (ArrayList<Integer> posiciones) {
-        Combinacion combinacion = jugadorEnTurno().combinacion(posiciones);
-        if (combinacion != null) {
-            super.combinaciones.add(combinacion);
-        }
-        for (Ficha f : combinacion.getFichas()) {
-            score += sumarScore(f);
-        }
-        if (combinacion.getFichas().size() >= 7) {
-            score += 200;
-        }
-    }
-
-    public void agregarFichaComb (int c, int f) {
-        Combinacion combinacion = combinaciones.get(c);
-        Jugador jugador = jugadorEnTurno();
-        if (combinacion.agregarFicha(jugador.getFichas().get(f))) {
-            score += sumarScore(jugador.getFichas().get(f));
-            jugador.getFichas().remove(f);
-            if (combinacion.getFichas().size() == 7) {
-                score += 200;
-            }
-        }
-
     }
 
     public String turnoJugador () {

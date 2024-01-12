@@ -44,6 +44,9 @@ public class Tablero implements ITablero {
         Ficha.ID++;
       }
     }
+    Ficha.ID++;
+    mazo.add(new Ficha(null, 50));
+    mazo.add(new Ficha(null, 50));
     Collections.shuffle(mazo);
   }
 
@@ -84,7 +87,7 @@ public class Tablero implements ITablero {
   }
 
   protected void generarFichasEquipos () {
-    if (equipo1.getClass() == EquipoSolo.class) {
+    if (equipo1.getClass() == Equipo.class) {
         equipo1.setFichas(this.obtenerFichas(12));
         equipo2.setFichas(this.obtenerFichas(12));
     } else {

@@ -2,8 +2,7 @@ package Vista;
 
 import Controlador.Controlador;
 import Vista.Consola.ConsoleGUI;
-import modelo.EquipoDuo;
-import modelo.EquipoSolo;
+import modelo.Equipo;
 import modelo.Jugador;
 import modelo.Tablero;
 
@@ -50,7 +49,7 @@ public class VistaNombre extends JFrame {
                     JOptionPane.showMessageDialog(null, "Nombre invalido");
                 } else {
                     Jugador jugador = new Jugador(nombre);
-                    EquipoSolo equipo = new EquipoSolo(jugador);
+                    Equipo equipo = new Equipo(jugador);
                     Controlador controlador = new Controlador(tablero);
                     ConsoleGUI consola = new ConsoleGUI(controlador);
                     controlador.setJugador(jugador);

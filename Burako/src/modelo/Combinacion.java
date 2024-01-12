@@ -3,50 +3,31 @@ package modelo;
 import java.util.ArrayList;
 import java.util.Comparator;
 
-public class Combinacion {
-    private ArrayList<Ficha> fichas;
-    private TipoCombinacion tipo;
-    public Combinacion (ArrayList<Ficha> fichas, TipoCombinacion tipo) {
+public abstract class Combinacion {
+    protected ArrayList<Ficha> fichas;
+    public Combinacion (ArrayList<Ficha> fichas) {
         this.fichas = fichas;
-        this.tipo = tipo;
     }
 
-    public boolean agregarFicha(Ficha ficha) {
-        if (tipo == TipoCombinacion.Escalera) {
-            if (verificarNumero(ficha, fichas.get(0))) {
-                fichas.add(0, ficha);
-                return true;
-            } else if (verificarNumero(fichas.get(fichas.size() - 1), ficha)){
-                fichas.add(ficha);
-                return true;
-            }
-            return false;
-        } else {
-            if (fichas.get(0).getNumero() == ficha.getNumero()) {
-                fichas.add(ficha);
-                return true;
-            } else {
-                return false;
-            }
-        }
-    };
+    public abstract boolean agregarFicha(Ficha ficha);
 
     public ArrayList<Ficha> getFichas () {
         return fichas;
     }
 
-    public TipoCombinacion getTipo () {
-        return tipo;
-    }
-
     public static TipoCombinacion verificarCombinacion(ArrayList<Ficha> combinacion) {
+        int comodines = tieneComodin(combinacion);
+        if (comodines > 0) {
+            combinacion.removeIf(f -> f.getNumero() == 50);
+        }
+
         if (combinacion.size() < 3) {
             return null;
         }
 
         combinacion.sort(Comparator.comparing(Ficha::getNumero));
 
-        if (esEscalera(combinacion)) {
+        if (esEscalera(combinacion, comodines)) {
             return TipoCombinacion.Escalera;
         }
 
@@ -57,13 +38,38 @@ public class Combinacion {
         return null;
     }
 
-    private static boolean esEscalera(ArrayList<Ficha> combinacion) {
+    private static int tieneComodin (ArrayList<Ficha> fichas) {
+        int comodines = 0;
+        for (Ficha f : fichas) {
+            if (f.getNumero() == 50) {
+                comodines++;
+            }
+        }
+        return comodines;
+    }
+    private static boolean esEscalera(ArrayList<Ficha> combinacion, int comodines) {
         for (int i = 1; i < combinacion.size(); i++) {
-            if (!verificarNumero(combinacion.get(i - 1), combinacion.get(i)) || !verificarColor(combinacion.get(i - 1), combinacion.get(i))) {
+            if (!verificarColor(combinacion.get(i - 1), combinacion.get(i))) {
                 return false;
+            }
+            if (!verificarNumero(combinacion.get(i - 1), combinacion.get(i))) {
+                if (!(comodines > 0 || esConComodin(combinacion, i))) {
+                    return false;
+                } else {
+                    comodines--;
+                }
+            }
+        }
+        if (comodines > 0) {
+            for (int i = 0;i < comodines;i++) {
+              combinacion.add(new Ficha(null, 50));
             }
         }
         return true;
+    }
+
+    private static boolean esConComodin(ArrayList<Ficha> combinacion, int i) {
+        return combinacion.get(i - 1).getNumero() == combinacion.get(i).getNumero() - 2;
     }
 
     private static boolean esPierna(ArrayList<Ficha> combinacion) {
@@ -83,11 +89,11 @@ public class Combinacion {
         return true;
     }
 
-    private static boolean verificarColor(Ficha f1, Ficha f2) {
+    protected static boolean verificarColor(Ficha f1, Ficha f2) {
         return f1.getColor() == f2.getColor();
     }
 
-    private static boolean verificarNumero(Ficha f1, Ficha f2) {
+    protected static boolean verificarNumero(Ficha f1, Ficha f2) {
         return f1.getNumero() == f2.getNumero() - 1;
     }
 

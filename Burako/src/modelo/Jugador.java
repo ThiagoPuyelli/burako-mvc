@@ -51,6 +51,10 @@ public class Jugador implements IJugador {
         }
       }
     }
-    return new Combinacion(fichasComb, tipo);
+    if (tipo == TipoCombinacion.Escalera) {
+      return new Escalera(fichasComb);
+    } else {
+      return new Pierna(fichasComb);
+    }
   }
 }
