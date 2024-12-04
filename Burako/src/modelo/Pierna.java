@@ -9,11 +9,18 @@ public class Pierna extends Combinacion {
     }
 
     public boolean agregarFicha(Ficha ficha) {
-        if (fichas.get(0).getNumero() == ficha.getNumero()) {
-            fichas.add(ficha);
-            return true;
-        } else {
+        ArrayList<Ficha> copia = new ArrayList<>();
+        copia.addAll(fichas);
+        copia.add(ficha);
+        int comodines = FabricaCombinacion.contarComodines(copia);
+
+        if (comodines > 1) {
             return false;
         }
+        if (FabricaCombinacion.esPierna(copia)) {
+            fichas = copia;
+            return true;
+        }
+        return false;
     }
 }

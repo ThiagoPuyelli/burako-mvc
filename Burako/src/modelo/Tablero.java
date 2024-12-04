@@ -45,8 +45,9 @@ public class Tablero implements ITablero {
       }
     }
     Ficha.ID++;
-    mazo.add(new Ficha(null, 50));
-    mazo.add(new Ficha(null, 50));
+    for (int i = 0;i < 6;i++) {
+        mazo.add(new Ficha(null, 50));
+    }
     Collections.shuffle(mazo);
   }
 

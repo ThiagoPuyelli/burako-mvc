@@ -36,25 +36,24 @@ public class Jugador implements IJugador {
     for (Integer p : posiciones) {
       fichasComb.add(fichas.get(p));
     }
-    TipoCombinacion tipo = Combinacion.verificarCombinacion(fichasComb);
+    Combinacion comb = FabricaCombinacion.crearCombinacion(fichasComb);
 
-    if (tipo == null) {
+    if (comb == null) {
       return null;
     }
     for (Ficha f : fichasComb) {
-      Iterator<Ficha> iterador = fichas.iterator();
-
-      while (iterador.hasNext()) {
-        Ficha ficha = iterador.next();
-        if (ficha.getId() == f.getId()) {
-          iterador.remove();
-        }
-      }
+      fichas.removeIf(fi -> fi.getId() == f.getId());
     }
-    if (tipo == TipoCombinacion.Escalera) {
-      return new Escalera(fichasComb);
-    } else {
-      return new Pierna(fichasComb);
-    }
+    return comb;
+    //for (Ficha f : fichasComb) {
+    //  Iterator<Ficha> iterador = fichas.iterator();
+//
+    //  while (iterador.hasNext()) {
+    //    Ficha ficha = iterador.next();
+    //    if (ficha.getId() == f.getId()) {
+    //      iterador.remove();
+    //    }
+    //  }
+    //}
   }
 }
