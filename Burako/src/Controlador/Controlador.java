@@ -51,7 +51,7 @@ public class Controlador implements IObserver {
   public void mostrarFichas () {
     vista.mostrarFichas();
   }
-  public ArrayList<Ficha> getPozo () {
+  public ArrayList<IFicha> getPozo () {
     return tablero.getPozo();
   }
   public ArrayList<Combinacion> getCombinaciones () {
@@ -60,7 +60,7 @@ public class Controlador implements IObserver {
   public ArrayList<Combinacion> getCombinacionesContrario () {
     return tablero.getCombinacionesContrario(jugador.getNombre());
   }
-  public ArrayList<Ficha> getFichas () {
+  public ArrayList<IFicha> getFichas () {
     return jugador.getFichas();
   }
 

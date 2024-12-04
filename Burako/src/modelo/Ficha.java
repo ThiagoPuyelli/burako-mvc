@@ -1,6 +1,6 @@
 package modelo;
 
-public class Ficha {
+public class Ficha implements IFicha {
   static int ID = 0;
   private int id;
   private int numero;

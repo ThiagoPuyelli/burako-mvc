@@ -25,7 +25,7 @@ public class Equipo {
     public ArrayList<Combinacion> getCombinaciones () {
         return combinaciones;
     }
-    static int sumarScore (Ficha f) {
+    static int sumarScore (IFicha f) {
         if (f.getNumero() == 1) {
             return 15;
         } else if (f.getNumero() == 2) {
@@ -39,7 +39,7 @@ public class Equipo {
 
     private Jugador jugadorEnTurno () { return jugador1; }
 
-    protected void setFichas (ArrayList<Ficha> fichas) {
+    protected void setFichas (ArrayList<IFicha> fichas) {
         jugador1.setFichas(fichas);
     }
 
@@ -51,21 +51,21 @@ public class Equipo {
         return jugador1.getNombre();
     }
 
-    public void agregarFichas (ArrayList<Ficha> fichas) {
+    public void agregarFichas (ArrayList<IFicha> fichas) {
         Jugador jugador = jugadorEnTurno();
-        ArrayList<Ficha> Jfichas = jugador.getFichas();
+        ArrayList<IFicha> Jfichas = jugador.getFichas();
         Jfichas.addAll(fichas);
         jugador.setFichas(Jfichas);
     }
 
-    public void agregarFichas (Ficha ficha) {
+    public void agregarFichas (IFicha ficha) {
         Jugador jugador = jugadorEnTurno();
-        ArrayList<Ficha> Jfichas = jugador.getFichas();
+        ArrayList<IFicha> Jfichas = jugador.getFichas();
         Jfichas.add(ficha);
         jugador.setFichas(Jfichas);
     }
 
-    public void agarrarPozo(int id, ArrayList<Ficha> pozo) {
+    public void agarrarPozo(int id, ArrayList<IFicha> pozo) {
         Jugador jugador = jugadorEnTurno();
         if (jugador.getId() == id && jugador.getEstadoTurno() == 2) {
             agregarFichas(pozo);
@@ -73,7 +73,7 @@ public class Equipo {
         }
     }
 
-    public void agarrarMazo (int id, Ficha ficha) {
+    public void agarrarMazo (int id, IFicha ficha) {
         Jugador jugador = jugadorEnTurno();
         if (jugador.getId() == id && jugador.getEstadoTurno() == 2) {
             agregarFichas(ficha);
@@ -95,7 +95,7 @@ public class Equipo {
         }
     }
 
-    public Ficha soltarFicha(int f) {
+    public IFicha soltarFicha(int f) {
         Jugador jugador = jugadorEnTurno();
         return jugador.soltarFicha(f);
     }
@@ -106,7 +106,7 @@ public class Equipo {
         if (combinacion != null) {
           combinaciones.add(combinacion);
         }
-        for (Ficha f : combinacion.getFichas()) {
+        for (IFicha f : combinacion.getFichas()) {
             score += sumarScore(f);
         }
         if (combinacion.getFichas().size() >= 7) {
@@ -130,7 +130,7 @@ public class Equipo {
         return jugadorEnTurno().getFichas().isEmpty();
     }
 
-    public void setMuerto (ArrayList<Ficha> muerto) {
+    public void setMuerto (ArrayList<IFicha> muerto) {
         agregarFichas(muerto);
     }
 

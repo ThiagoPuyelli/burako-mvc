@@ -6,6 +6,7 @@ import Vista.VistaPlay;
 import modelo.ColorFicha;
 import modelo.Combinacion;
 import modelo.Ficha;
+import modelo.IFicha;
 
 import javax.swing.*;
 import javax.swing.text.BadLocationException;
@@ -107,7 +108,7 @@ public class ConsoleGUI extends VistaPlay implements IVista  {
     public void mostrarFichas () {
         agregarTexto("Fichas: ", Color.BLACK);
         int i = 1;
-        for (Ficha f : controlador.getFichas()) {
+        for (IFicha f : controlador.getFichas()) {
             //agregarTexto(i + ". ", Color.LIGHT_GRAY);
             mostrarFicha(f);
             i++;
@@ -115,13 +116,13 @@ public class ConsoleGUI extends VistaPlay implements IVista  {
         i = 1;
         agregarTexto("\nScore: " + controlador.getScore(), Color.BLACK);
         agregarTexto("\nPozo: ", Color.BLACK);
-        for (Ficha f : controlador.getPozo()) {
+        for (IFicha f : controlador.getPozo()) {
             mostrarFicha(f);
         }
         agregarTexto("\nCombinaciones: ", Color.BLACK);
         for (Combinacion c : controlador.getCombinaciones()) {
             agregarTexto("\n" + i + ". ", Color.BLACK);
-            for (Ficha f : c.getFichas()) {
+            for (IFicha f : c.getFichas()) {
                 mostrarFicha(f);
             }
             i++;
@@ -129,12 +130,12 @@ public class ConsoleGUI extends VistaPlay implements IVista  {
         agregarTexto("\nCombinaciones del otro equipo:", Color.BLACK);
         for (Combinacion c : controlador.getCombinacionesContrario()) {
             agregarTexto("\n", Color.BLACK);
-            for (Ficha f : c.getFichas()) {
+            for (IFicha f : c.getFichas()) {
                 mostrarFicha(f);
             }
         }
     }
-    private void mostrarFicha (Ficha f) {
+    private void mostrarFicha (IFicha f) {
         if (ColorFicha.rojo == f.getColor()) {
             agregarTexto(f.getNumero() + "  ", Color.RED);
         } else if (ColorFicha.verde == f.getColor()) {

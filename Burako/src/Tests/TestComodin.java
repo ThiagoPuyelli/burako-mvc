@@ -1,32 +1,29 @@
 package Tests;
 
-import modelo.ColorFicha;
-import modelo.Combinacion;
-import modelo.FabricaCombinacion;
-import modelo.Ficha;
+import modelo.*;
 
 import java.util.ArrayList;
 
 public class TestComodin {
     public static void main(String[] args) {
-        ArrayList<Ficha> fichas = new ArrayList<>();
+        ArrayList<IFicha> fichas = new ArrayList<>();
         fichas.add(new Ficha(ColorFicha.azul, 2));
         fichas.add(new Ficha(ColorFicha.azul, 1));
         fichas.add(new Ficha(ColorFicha.azul, 3));
-        ArrayList<Ficha> fichas2 = new ArrayList<>();
+        ArrayList<IFicha> fichas2 = new ArrayList<>();
         fichas2.add(new Ficha(ColorFicha.azul, 2));
         fichas2.add(new Ficha(ColorFicha.azul, 1));
         fichas2.add(new Ficha(ColorFicha.verde, 50));
-        ArrayList<Ficha> fichas3 = new ArrayList<>();
+        ArrayList<IFicha> fichas3 = new ArrayList<>();
         fichas3.add(new Ficha(ColorFicha.azul, 2));
         fichas3.add(new Ficha(ColorFicha.azul, 1));
         fichas3.add(new Ficha(ColorFicha.verde, 50));
-        ArrayList<Ficha> fichas4 = new ArrayList<>();
+        ArrayList<IFicha> fichas4 = new ArrayList<>();
         fichas4.add(new Ficha(ColorFicha.azul, 2));
         fichas4.add(new Ficha(ColorFicha.azul, 1));
         fichas4.add(new Ficha(ColorFicha.azul, 4));
         fichas4.add(new Ficha(ColorFicha.verde, 50));
-        ArrayList<Ficha> fichas5 = new ArrayList<>();
+        ArrayList<IFicha> fichas5 = new ArrayList<>();
         //for (int i = 1;i <= 13;i++) {
         //    fichas5.add(new Ficha(ColorFicha.azul, i));
         //}
@@ -49,7 +46,7 @@ public class TestComodin {
         System.out.println("Numero de vaina " + num);
         if (fichas != null) {
             String pepe = "";
-            for (Ficha f : fichas.getFichas()) {
+            for (IFicha f : fichas.getFichas()) {
                 pepe += f.getColor() + " " + f.getNumero() + " ";
             }
             System.out.println(pepe);

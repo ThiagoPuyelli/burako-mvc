@@ -7,7 +7,7 @@ public class Jugador implements IJugador {
   private static int ID = 0;
   private int id;
   private String nombre;
-  private ArrayList<Ficha> fichas;
+  private ArrayList<IFicha> fichas;
   private int estadoTurno = 0;
 
   public Jugador (String nombre) {
@@ -15,7 +15,7 @@ public class Jugador implements IJugador {
     ID++;
     this.nombre = nombre;
   }
-  public void setFichas (ArrayList<Ficha> fichas) {
+  public void setFichas (ArrayList<IFicha> fichas) {
     this.fichas = fichas;
   }
   public int getEstadoTurno () {
@@ -26,18 +26,18 @@ public class Jugador implements IJugador {
   }
   public int getId () { return id; };
   public String getNombre () { return nombre; }
-  public ArrayList<Ficha> getFichas () { return this.fichas; };
-  public Ficha soltarFicha (int f) {
+  public ArrayList<IFicha> getFichas () { return this.fichas; };
+  public IFicha soltarFicha (int f) {
     return fichas.remove(f);
   }
 
   public Combinacion combinacion (ArrayList<Integer> posiciones) {
-    ArrayList<Ficha> fichasComb = new ArrayList<>();
+    ArrayList<IFicha> fichasComb = new ArrayList<>();
     for (Integer p : posiciones) {
       fichasComb.add(fichas.get(p));
     }
     System.out.print("DALE GEY: ");
-    for (Ficha f : fichasComb) {
+    for (IFicha f : fichasComb) {
       System.out.print(f.getNumero() + " ");
     }
     System.out.print("\n");
@@ -46,7 +46,7 @@ public class Jugador implements IJugador {
     if (comb == null) {
       return null;
     }
-    for (Ficha f : fichasComb) {
+    for (IFicha f : fichasComb) {
       fichas.removeIf(fi -> fi.getId() == f.getId());
     }
     return comb;

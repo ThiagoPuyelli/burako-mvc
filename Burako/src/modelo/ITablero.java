@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public interface ITablero {
     void notificarObservadores(Object valor);
     void agregarObservador (IObserver observer);
-    ArrayList<Ficha> getPozo ();
+    ArrayList<IFicha> getPozo ();
     ArrayList<Combinacion> getCombinaciones(String nombre);
     String getTurno ();
     boolean getStart ();

@@ -6,10 +6,10 @@ import java.util.Random;
 
 public class Tablero implements ITablero {
   ArrayList<IObserver> observers = new ArrayList<IObserver>();
-  ArrayList<Ficha> mazo = new ArrayList<>();
-  ArrayList<Ficha> pozo = new ArrayList<>();
-  Ficha[] muerto1 = new Ficha[11];
-  Ficha[] muerto2 = new Ficha[11];
+  ArrayList<IFicha> mazo = new ArrayList<>();
+  ArrayList<IFicha> pozo = new ArrayList<>();
+  IFicha[] muerto1 = new IFicha[11];
+  IFicha[] muerto2 = new IFicha[11];
   Equipo equipo1;
   Equipo equipo2;
   String turno;
@@ -21,7 +21,7 @@ public class Tablero implements ITablero {
     generarMuertos();
   }
 
-  public ArrayList<Ficha> getPozo () {
+  public ArrayList<IFicha> getPozo () {
     return this.pozo;
   }
 
@@ -57,8 +57,8 @@ public class Tablero implements ITablero {
     }
   }
 
-  private ArrayList<Ficha> obtenerFichas (int cantidad) {
-    ArrayList<Ficha> fichas = new ArrayList<>();
+  private ArrayList<IFicha> obtenerFichas (int cantidad) {
+    ArrayList<IFicha> fichas = new ArrayList<>();
     for (int i = 0;i < cantidad;i++) {
       fichas.add(this.obtenerFicha());
     }
@@ -110,7 +110,7 @@ public class Tablero implements ITablero {
     }
   }
 
-  private Ficha obtenerFicha () {
+  private IFicha obtenerFicha () {
     return this.mazo.remove(0);
   }
 
@@ -146,7 +146,7 @@ public class Tablero implements ITablero {
   }
 
   public void agarrarMazo (int id) {
-    Ficha ficha = this.obtenerFicha();
+    IFicha ficha = this.obtenerFicha();
     equipo1.agarrarMazo(id, ficha);
     equipo2.agarrarMazo(id, ficha);
     notificarObservadores(Eventos.ACTUALIZAR_PARTIDA);
@@ -202,9 +202,9 @@ public class Tablero implements ITablero {
   public void actualizarMuertos () {
     if (equipo1.sinFichas()) {
       if (muerto1[0] != null) {
-        ArrayList<Ficha> muertoAct = new ArrayList<>();
+        ArrayList<IFicha> muertoAct = new ArrayList<>();
         int i = 0;
-        for (Ficha m : muerto1) {
+        for (IFicha m : muerto1) {
           muertoAct.add(m);
           muerto1[i] = null;
           i++;
@@ -218,9 +218,9 @@ public class Tablero implements ITablero {
       }
     } else if (equipo2.sinFichas()) {
       if (muerto2[0] != null) {
-        ArrayList<Ficha> muertoAct = new ArrayList<>();
+        ArrayList<IFicha> muertoAct = new ArrayList<>();
         int i = 0;
-        for (Ficha m : muerto2) {
+        for (IFicha m : muerto2) {
           muertoAct.add(m);
           muerto2[i] = null;
           i++;

@@ -4,15 +4,15 @@ import java.util.ArrayList;
 import java.util.Comparator;
 
 public abstract class Combinacion {
-    protected ArrayList<Ficha> fichas;
+    protected ArrayList<IFicha> fichas;
 
-    public Combinacion (ArrayList<Ficha> fichas) {
+    public Combinacion (ArrayList<IFicha> fichas) {
         this.fichas = fichas;
     }
 
-    public abstract boolean agregarFicha(Ficha ficha);
+    public abstract boolean agregarFicha(IFicha ficha);
 
-    public ArrayList<Ficha> getFichas () {
+    public ArrayList<IFicha> getFichas () {
         return fichas;
     }
 }

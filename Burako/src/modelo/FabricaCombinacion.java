@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class FabricaCombinacion {
-    public static Combinacion crearCombinacion (ArrayList<Ficha> combinacion) {
+    public static Combinacion crearCombinacion (ArrayList<IFicha> combinacion) {
 
         int comodines = contarComodines(combinacion);
 
@@ -31,9 +31,9 @@ public class FabricaCombinacion {
         return null;
     }
 
-    public static int contarComodines (ArrayList<Ficha> fichas) {
+    public static int contarComodines (ArrayList<IFicha> fichas) {
         int comodines = 0;
-        for (Ficha f : fichas) {
+        for (IFicha f : fichas) {
             if (f.getNumero() == 50) {
                 comodines++;
             }
@@ -41,16 +41,16 @@ public class FabricaCombinacion {
         return comodines;
     }
 
-    public static boolean esEscalera(ArrayList<Ficha> combinacion) {
+    public static boolean esEscalera(ArrayList<IFicha> combinacion) {
 
         ordenarFichas(combinacion);
         if (checkEscalera(combinacion)) {
             return true;
         }
         if (combinacion.get(combinacion.size() - 1).getNumero() == 50) {
-            Ficha co = combinacion.remove(combinacion.size() - 1);
+            IFicha co = combinacion.remove(combinacion.size() - 1);
             int pos = combinacionConComodin(combinacion);
-            for (Ficha f : combinacion) {
+            for (IFicha f : combinacion) {
             }
             if (pos == -1) return false;
             combinacion.add(pos, co);
@@ -60,11 +60,11 @@ public class FabricaCombinacion {
             }
             return false;
         }
-        List<Ficha> fichasFiltradas = combinacion.stream()
+        List<IFicha> fichasFiltradas = combinacion.stream()
                 .filter(fi -> fi.getNumero() == 2)
                 .toList();
         if (fichasFiltradas.size() == 1) {
-            Ficha fi2 = fichasFiltradas.get(0);
+            IFicha fi2 = fichasFiltradas.get(0);
             combinacion.removeIf(fi -> fi.getNumero() == 2);
             boolean escaleraSin2 = true;
             for (int i = 1; i < combinacion.size(); i++) {
@@ -74,7 +74,7 @@ public class FabricaCombinacion {
             }
             if (escaleraSin2) {
                 combinacion.add(fi2);
-                for (Ficha f : combinacion) {
+                for (IFicha f : combinacion) {
                 }
                 return true;
             }
@@ -87,7 +87,7 @@ public class FabricaCombinacion {
         return false;
     }
 
-    private static boolean checkEscalera (ArrayList<Ficha> combinacion) {
+    private static boolean checkEscalera (ArrayList<IFicha> combinacion) {
         for (int i = 1; i < combinacion.size(); i++) {
             if (!verificarColor(combinacion.get(i - 1), combinacion.get(i))) {
                 return false;
@@ -99,7 +99,7 @@ public class FabricaCombinacion {
         return true;
     }
 
-    private static int combinacionConComodin(ArrayList<Ficha> combinacion) {
+    private static int combinacionConComodin(ArrayList<IFicha> combinacion) {
         int pos = 1;
         boolean como = true;
         for (int i = 1;i < combinacion.size();i++) {
@@ -116,24 +116,24 @@ public class FabricaCombinacion {
         return pos < combinacion.size() ? pos : -1;
     }
 
-    private static boolean esConComodin(ArrayList<Ficha> combinacion, int i) {
+    private static boolean esConComodin(ArrayList<IFicha> combinacion, int i) {
         return combinacion.get(i - 1).getNumero() == combinacion.get(i).getNumero() - 2;
     }
 
-    public static boolean esPierna(ArrayList<Ficha> combinacion) {
+    public static boolean esPierna(ArrayList<IFicha> combinacion) {
         ordenarFichas(combinacion);
 
         if (verificarPiernaBase(combinacion)) {
             return true;
         }
         if (combinacion.get(combinacion.size() - 1).getNumero() != 50) {
-            List<Ficha> fichas2 = combinacion.stream()
+            List<IFicha> fichas2 = combinacion.stream()
                     .filter(fi -> fi.getNumero() == 2)
                     .toList();
             if (fichas2.size() != 1) {
                 return false;
             }
-            Ficha f = fichas2.get(0);
+            IFicha f = fichas2.get(0);
             combinacion.removeIf(fi -> fi.getNumero() == 2);
             boolean check = verificarPiernaBase(combinacion);
             combinacion.add(f);
@@ -144,7 +144,7 @@ public class FabricaCombinacion {
         return false;
     }
 
-    public static boolean verificarPiernaBase (ArrayList<Ficha> combinacion) {
+    public static boolean verificarPiernaBase (ArrayList<IFicha> combinacion) {
         int numeroBase = combinacion.get(0).getNumero();
         int c = 0;
         for (int i = 1; i < combinacion.size(); i++) {
@@ -155,16 +155,16 @@ public class FabricaCombinacion {
         return true;
     }
 
-    protected static boolean verificarColor(Ficha f1, Ficha f2) {
+    protected static boolean verificarColor(IFicha f1, IFicha f2) {
         return f1.getColor() == f2.getColor() || f1.getNumero() == 50 || f2.getNumero() == 50;
     }
 
-    public static boolean verificarNumero(Ficha f1, Ficha f2) {
+    public static boolean verificarNumero(IFicha f1, IFicha f2) {
         return f1.getNumero() == f2.getNumero() - 1 || f1.getNumero() == 50 || f2.getNumero() == 50;
     }
 
-    public static void ordenarFichas (ArrayList<Ficha> fichas) {
-        fichas.sort(Comparator.comparing(Ficha::getNumero));
+    public static void ordenarFichas (ArrayList<IFicha> fichas) {
+        fichas.sort(Comparator.comparing(IFicha::getNumero));
     }
 
 }

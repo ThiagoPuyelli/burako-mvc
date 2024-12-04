@@ -11,7 +11,7 @@ public class EquipoDuo extends Equipo {
         this.jugador2 = jugador2;
     }
 
-    public void setFichas (ArrayList<Ficha> fichas) {
+    public void setFichas (ArrayList<IFicha> fichas) {
         if (jugador1.getFichas() == null || jugador1.getFichas().isEmpty()) {
             jugador1.setFichas(fichas);
         } else {
@@ -56,7 +56,7 @@ public class EquipoDuo extends Equipo {
         }
     }
 
-    public Ficha soltarFicha(int f) {
+    public IFicha soltarFicha(int f) {
         if (jugadorEnTurno() == jugador1) {
             return jugador2.soltarFicha(f);
         } else {
@@ -72,14 +72,14 @@ public class EquipoDuo extends Equipo {
         return jugador1.getFichas().isEmpty() || jugador2.getFichas().isEmpty();
     }
 
-    public void setMuerto (ArrayList<Ficha> muerto) {
+    public void setMuerto (ArrayList<IFicha> muerto) {
         Jugador jugador;
         if (jugador1.getFichas().isEmpty()) {
             jugador = jugador1;
         } else {
             jugador = jugador2;
         }
-        ArrayList<Ficha> Jfichas = jugador.getFichas();
+        ArrayList<IFicha> Jfichas = jugador.getFichas();
         Jfichas.addAll(muerto);
         jugador.setFichas(Jfichas);
     }

@@ -3,12 +3,12 @@ package modelo;
 import java.util.ArrayList;
 
 public class Escalera extends Combinacion {
-    public Escalera (ArrayList<Ficha> fichas) {
+    public Escalera (ArrayList<IFicha> fichas) {
         super(fichas);
     }
 
-    public boolean agregarFicha(Ficha ficha) {
-        ArrayList<Ficha> copia = new ArrayList<>();
+    public boolean agregarFicha(IFicha ficha) {
+        ArrayList<IFicha> copia = new ArrayList<>();
         copia.addAll(fichas);
         copia.add(ficha);
         int comodines = FabricaCombinacion.contarComodines(copia);
