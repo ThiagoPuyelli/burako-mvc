@@ -30,9 +30,10 @@ public class TestComodin {
         //for (int i = 1;i <= 13;i++) {
         //    fichas5.add(new Ficha(ColorFicha.azul, i));
         //}
-        fichas5.add(new Ficha(ColorFicha.azul, 1));
-        fichas5.add(new Ficha(ColorFicha.verde, 2));
-        fichas5.add(new Ficha(ColorFicha.azul, 1));
+        fichas5.add(new Ficha(ColorFicha.verde, 5));
+        fichas5.add(new Ficha(ColorFicha.azul, 5));
+        fichas5.add(new Ficha(ColorFicha.rojo, 5));
+        fichas5.add(new Ficha(ColorFicha.azul, 5));
         //fichas5.add(new Ficha(ColorFicha.azul, 11));
         //mostrarComb(FabricaCombinacion.crearCombinacion(fichas), 1);
         //mostrarComb(FabricaCombinacion.crearCombinacion(fichas2), 2);

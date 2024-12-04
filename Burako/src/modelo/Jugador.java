@@ -36,6 +36,11 @@ public class Jugador implements IJugador {
     for (Integer p : posiciones) {
       fichasComb.add(fichas.get(p));
     }
+    System.out.print("DALE GEY: ");
+    for (Ficha f : fichasComb) {
+      System.out.print(f.getNumero() + " ");
+    }
+    System.out.print("\n");
     Combinacion comb = FabricaCombinacion.crearCombinacion(fichasComb);
 
     if (comb == null) {
