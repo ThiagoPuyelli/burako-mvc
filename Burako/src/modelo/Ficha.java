@@ -1,6 +1,8 @@
 package modelo;
 
-public class Ficha implements IFicha {
+import java.io.Serializable;
+
+public class Ficha implements IFicha, Serializable {
   static int ID = 0;
   private int id;
   private int numero;

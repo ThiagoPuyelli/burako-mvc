@@ -1,5 +1,6 @@
 package modelo;
 
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 public class EquipoDuo extends Equipo {
@@ -11,7 +12,7 @@ public class EquipoDuo extends Equipo {
         this.jugador2 = jugador2;
     }
 
-    public void setFichas (ArrayList<IFicha> fichas) {
+    public void setFichas (ArrayList<IFicha> fichas) throws RemoteException {
         if (jugador1.getFichas() == null || jugador1.getFichas().isEmpty()) {
             jugador1.setFichas(fichas);
         } else {
@@ -19,7 +20,7 @@ public class EquipoDuo extends Equipo {
         }
     }
 
-    public boolean verificarJugador (String nombre) {
+    public boolean verificarJugador (String nombre) throws RemoteException {
         return jugador1.getNombre().equals(nombre) || jugador2.getNombre().equals(nombre);
     }
 
@@ -31,7 +32,7 @@ public class EquipoDuo extends Equipo {
         }
     }
 
-    public void setEstadoTurno(int estado) {
+    public void setEstadoTurno(int estado) throws RemoteException {
         jugadorEnTurno().setEstadoTurno(estado);
         if (estado == 0) {
             rotarTurno();
@@ -46,7 +47,7 @@ public class EquipoDuo extends Equipo {
         }
     }
 
-    public Jugador getJugador (String nombre) {
+    public Jugador getJugador (String nombre) throws RemoteException {
         if (jugador1.getNombre().equals(nombre)) {
             return jugador1;
         } else if (jugador2.getNombre().equals(nombre)) {
@@ -56,7 +57,7 @@ public class EquipoDuo extends Equipo {
         }
     }
 
-    public IFicha soltarFicha(int f) {
+    public IFicha soltarFicha(int f) throws RemoteException {
         if (jugadorEnTurno() == jugador1) {
             return jugador2.soltarFicha(f);
         } else {
@@ -64,15 +65,15 @@ public class EquipoDuo extends Equipo {
         }
     }
 
-    public String turnoJugador () {
+    public String turnoJugador () throws RemoteException {
         return jugadorEnTurno().getNombre();
     }
 
-    public boolean sinFichas () {
+    public boolean sinFichas () throws RemoteException {
         return jugador1.getFichas().isEmpty() || jugador2.getFichas().isEmpty();
     }
 
-    public void setMuerto (ArrayList<IFicha> muerto) {
+    public void setMuerto (ArrayList<IFicha> muerto) throws RemoteException {
         Jugador jugador;
         if (jugador1.getFichas().isEmpty()) {
             jugador = jugador1;
@@ -88,7 +89,7 @@ public class EquipoDuo extends Equipo {
         return this.score;
     }
 
-    public String listarJugadores () {
+    public String listarJugadores () throws RemoteException {
         return jugador1.getNombre() + " " + jugador2.getNombre();
     }
 }

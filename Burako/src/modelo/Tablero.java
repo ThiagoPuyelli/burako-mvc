@@ -1,10 +1,13 @@
 package modelo;
 
+import ar.edu.unlu.rmimvc.observer.ObservableRemoto;
+
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 
-public class Tablero implements ITablero {
+public class Tablero extends ObservableRemoto implements ITablero {
   ArrayList<IObserver> observers = new ArrayList<IObserver>();
   ArrayList<IFicha> mazo = new ArrayList<>();
   ArrayList<IFicha> pozo = new ArrayList<>();
@@ -21,18 +24,18 @@ public class Tablero implements ITablero {
     generarMuertos();
   }
 
-  public ArrayList<IFicha> getPozo () {
+  public ArrayList<IFicha> getPozo () throws RemoteException {
     return this.pozo;
   }
 
-  public boolean getStart () {
+  public boolean getStart () throws RemoteException {
     return start;
   }
-  public void setStart (boolean start) {
+  public void setStart (boolean start) throws RemoteException {
     this.start = start;
   }
 
-  public String getTurno () {
+  public String getTurno () throws RemoteException {
     return turno;
   }
 
@@ -65,7 +68,7 @@ public class Tablero implements ITablero {
     return fichas;
   }
 
-  public void setEquipos (Equipo eq) {
+  public void setEquipos (Equipo eq) throws RemoteException {
     if (equipo1 == null) {
       equipo1 = eq;
     } else {
@@ -76,17 +79,17 @@ public class Tablero implements ITablero {
     }
   }
 
-  public void agregarObservador (IObserver observer) {
+  public void agregarObservador (IObserver observer) throws RemoteException {
     this.observers.add(observer);
   }
 
-  public void notificarObservadores (Object valor) {
+  public void notificarObservadores (Object valor) throws RemoteException {
     for (IObserver o : observers) {
       o.actualizar(valor);
     }
   }
 
-  protected void generarFichasEquipos () {
+  protected void generarFichasEquipos () throws RemoteException {
     if (equipo1.getClass() == Equipo.class) {
         equipo1.setFichas(this.obtenerFichas(12));
         equipo2.setFichas(this.obtenerFichas(12));
@@ -98,7 +101,7 @@ public class Tablero implements ITablero {
     }
   }
 
-  private void elegirTurno () {
+  private void elegirTurno () throws RemoteException {
     Random random = new Random();
     int value = random.nextInt(2);
     if (value == 0) {
@@ -114,23 +117,27 @@ public class Tablero implements ITablero {
     return this.mazo.remove(0);
   }
 
-  public ArrayList<Combinacion> getCombinaciones (String nombre) {
+  public ArrayList<ICombinacion> getCombinaciones (String nombre) throws RemoteException {
+    ArrayList<ICombinacion> combReturns = new ArrayList<>();
     if (equipo1.verificarJugador(nombre)) {
-      return equipo1.getCombinaciones();
+      combReturns.addAll(equipo1.getCombinaciones());
     } else {
-      return equipo2.getCombinaciones();
+      combReturns.addAll(equipo2.getCombinaciones());
     }
+    return combReturns;
   }
 
-  public ArrayList<Combinacion> getCombinacionesContrario (String nombre) {
+  public ArrayList<ICombinacion> getCombinacionesContrario (String nombre) throws RemoteException {
+    ArrayList<ICombinacion> combReturns = new ArrayList<>();
     if (equipo1.verificarJugador(nombre)) {
-      return equipo2.getCombinaciones();
+      combReturns.addAll(equipo2.getCombinaciones());
     } else {
-      return equipo1.getCombinaciones();
+      combReturns.addAll(equipo1.getCombinaciones());
     }
+    return combReturns;
   }
 
-  public int getScore (String nombre) {
+  public int getScore (String nombre) throws RemoteException {
     if (equipo1.verificarJugador(nombre)) {
       return equipo1.getScore();
     } else {
@@ -138,21 +145,21 @@ public class Tablero implements ITablero {
     }
   }
 
-  public void agarrarPozo (int id) {
+  public void agarrarPozo (int id) throws RemoteException {
     equipo1.agarrarPozo(id, pozo);
     equipo2.agarrarPozo(id, pozo);
     pozo.clear();
     notificarObservadores(Eventos.ACTUALIZAR_PARTIDA);
   }
 
-  public void agarrarMazo (int id) {
+  public void agarrarMazo (int id) throws RemoteException {
     IFicha ficha = this.obtenerFicha();
     equipo1.agarrarMazo(id, ficha);
     equipo2.agarrarMazo(id, ficha);
     notificarObservadores(Eventos.ACTUALIZAR_PARTIDA);
   }
 
-  public Jugador getJugador (String nombre) {
+  public Jugador getJugador (String nombre) throws RemoteException {
     Jugador jugador = equipo1.getJugador(nombre);
     if (jugador == null) {
       jugador = equipo2.getJugador(nombre);
@@ -160,7 +167,7 @@ public class Tablero implements ITablero {
     return jugador;
   }
 
-  public void soltarFicha (int f) {
+  public void soltarFicha (int f) throws RemoteException {
     Equipo eq = equipo1;
     if (!equipo1.getTurno()) {
       eq = equipo2;
@@ -177,7 +184,7 @@ public class Tablero implements ITablero {
     notificarObservadores(Eventos.ACTUALIZAR_PARTIDA);
   }
 
-  public void combinacion (ArrayList<Integer> posiciones) {
+  public void combinacion (ArrayList<Integer> posiciones) throws RemoteException {
     if (equipo1.getTurno()) {
       equipo1.combinacion(posiciones);
     } else {
@@ -188,7 +195,7 @@ public class Tablero implements ITablero {
     verificarScoreWin();
   }
 
-  public void agregarFichaComb (int c, int f) {
+  public void agregarFichaComb (int c, int f) throws RemoteException {
     Equipo eq = equipo1;
     if (!equipo1.getTurno()) {
       eq = equipo2;
@@ -199,7 +206,7 @@ public class Tablero implements ITablero {
     verificarScoreWin();
   }
 
-  public void actualizarMuertos () {
+  public void actualizarMuertos () throws RemoteException {
     if (equipo1.sinFichas()) {
       if (muerto1[0] != null) {
         ArrayList<IFicha> muertoAct = new ArrayList<>();
@@ -235,7 +242,7 @@ public class Tablero implements ITablero {
     }
   }
 
-  private void verificarScoreWin () {
+  private void verificarScoreWin () throws RemoteException {
     if (equipo1.getScore() >= 100) {
       ganador = equipo1.listarJugadores();
       notificarObservadores(Eventos.TERMINAR_PARTIDA);
@@ -245,7 +252,7 @@ public class Tablero implements ITablero {
     }
   }
 
-  public String getGanador () {
+  public String getGanador () throws RemoteException {
     return ganador;
   }
 }

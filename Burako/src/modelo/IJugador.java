@@ -1,14 +1,16 @@
 package modelo;
 
+import ar.edu.unlu.rmimvc.observer.IObservableRemoto;
+
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 public interface IJugador {
-  int getId();
-  String getNombre();
-  void setFichas (ArrayList<IFicha> fichas);
-  int getEstadoTurno ();
-  void setEstadoTurno(int estadoTurno);
-  ArrayList<IFicha> getFichas ();
-  IFicha soltarFicha (int f);
-  Combinacion combinacion (ArrayList<Integer> posiciones);
+  int getId() throws RemoteException;
+  String getNombre() throws RemoteException;
+  void setFichas (ArrayList<IFicha> fichas) throws RemoteException;
+  int getEstadoTurno () throws RemoteException;
+  void setEstadoTurno(int estadoTurno) throws RemoteException;
+  ArrayList<IFicha> getFichas () throws RemoteException;
+  IFicha soltarFicha (int f) throws RemoteException;
 }

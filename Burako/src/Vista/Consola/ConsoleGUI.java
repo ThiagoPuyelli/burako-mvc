@@ -3,10 +3,7 @@ package Vista.Consola;
 import Controlador.Controlador;
 import Vista.IVista;
 import Vista.VistaPlay;
-import modelo.ColorFicha;
-import modelo.Combinacion;
-import modelo.Ficha;
-import modelo.IFicha;
+import modelo.*;
 
 import javax.swing.*;
 import javax.swing.text.BadLocationException;
@@ -120,7 +117,7 @@ public class ConsoleGUI extends VistaPlay implements IVista  {
             mostrarFicha(f);
         }
         agregarTexto("\nCombinaciones: ", Color.BLACK);
-        for (Combinacion c : controlador.getCombinaciones()) {
+        for (ICombinacion c : controlador.getCombinaciones()) {
             agregarTexto("\n" + i + ". ", Color.BLACK);
             for (IFicha f : c.getFichas()) {
                 mostrarFicha(f);
@@ -128,7 +125,7 @@ public class ConsoleGUI extends VistaPlay implements IVista  {
             i++;
         }
         agregarTexto("\nCombinaciones del otro equipo:", Color.BLACK);
-        for (Combinacion c : controlador.getCombinacionesContrario()) {
+        for (ICombinacion c : controlador.getCombinacionesContrario()) {
             agregarTexto("\n", Color.BLACK);
             for (IFicha f : c.getFichas()) {
                 mostrarFicha(f);

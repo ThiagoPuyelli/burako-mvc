@@ -10,6 +10,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.rmi.RemoteException;
 
 public class VistaNombreDuo extends JFrame {
     private JLabel mensajeLabel;
@@ -55,20 +56,24 @@ public class VistaNombreDuo extends JFrame {
                     Jugador jugador1 = new Jugador(nombre1);
                     Jugador jugador2 = new Jugador(nombre2);
                     EquipoDuo equipo = new EquipoDuo(jugador1, jugador2);
-                    Controlador controlador1 = new Controlador(tablero);
+                    Controlador controlador1 = new Controlador();
                     ConsoleGUI consola1 = new ConsoleGUI(controlador1);
                     controlador1.setVista(consola1);
                     controlador1.setJugador(jugador1);
                     consola1.iniciar();
-                    Controlador controlador2 = new Controlador(tablero);
+                    Controlador controlador2 = new Controlador();
                     ConsoleGUI consola2 = new ConsoleGUI(controlador2);
                     controlador2.setVista(consola2);
                     controlador2.setJugador(jugador2);
                     consola2.iniciar();
                     setVisible(false);
-                    tablero.agregarObservador(controlador2);
-                    tablero.agregarObservador(controlador1);
-                    tablero.setEquipos(equipo);
+                    try {
+                        tablero.agregarObservador(controlador2);
+                        tablero.agregarObservador(controlador1);
+                        tablero.setEquipos(equipo);
+                    } catch (RemoteException ex) {
+                        throw new RuntimeException(ex);
+                    }
                 }
             }
         });

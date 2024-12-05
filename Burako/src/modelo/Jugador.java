@@ -1,9 +1,13 @@
 package modelo;
 
+import ar.edu.unlu.rmimvc.observer.IObservableRemoto;
+
+import java.io.Serializable;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public class Jugador implements IJugador {
+public class Jugador implements IJugador, Serializable {
   private static int ID = 0;
   private int id;
   private String nombre;
@@ -15,23 +19,23 @@ public class Jugador implements IJugador {
     ID++;
     this.nombre = nombre;
   }
-  public void setFichas (ArrayList<IFicha> fichas) {
+  public void setFichas (ArrayList<IFicha> fichas) throws RemoteException {
     this.fichas = fichas;
   }
-  public int getEstadoTurno () {
+  public int getEstadoTurno () throws RemoteException {
     return estadoTurno;
   }
-  public void setEstadoTurno(int estadoTurno) {
+  public void setEstadoTurno(int estadoTurno) throws RemoteException {
     this.estadoTurno = estadoTurno;
   }
-  public int getId () { return id; };
-  public String getNombre () { return nombre; }
-  public ArrayList<IFicha> getFichas () { return this.fichas; };
-  public IFicha soltarFicha (int f) {
+  public int getId () throws RemoteException { return id; };
+  public String getNombre () throws RemoteException { return nombre; }
+  public ArrayList<IFicha> getFichas () throws RemoteException { return this.fichas; };
+  public IFicha soltarFicha (int f) throws RemoteException {
     return fichas.remove(f);
   }
 
-  public Combinacion combinacion (ArrayList<Integer> posiciones) {
+  public Combinacion combinacion (ArrayList<Integer> posiciones) throws RemoteException {
     ArrayList<IFicha> fichasComb = new ArrayList<>();
     for (Integer p : posiciones) {
       fichasComb.add(fichas.get(p));

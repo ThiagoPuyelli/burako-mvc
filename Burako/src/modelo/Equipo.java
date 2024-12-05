@@ -1,5 +1,6 @@
 package modelo;
 
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 public class Equipo {
@@ -14,7 +15,7 @@ public class Equipo {
     public boolean getTurno () {
         return turno;
     }
-    public void setTurno (boolean turno) {
+    public void setTurno (boolean turno) throws RemoteException {
         this.turno = turno;
         if (turno) {
             setEstadoTurno(2);
@@ -39,33 +40,33 @@ public class Equipo {
 
     private Jugador jugadorEnTurno () { return jugador1; }
 
-    protected void setFichas (ArrayList<IFicha> fichas) {
+    protected void setFichas (ArrayList<IFicha> fichas) throws RemoteException {
         jugador1.setFichas(fichas);
     }
 
-    public boolean verificarJugador (String nombre) {
+    public boolean verificarJugador (String nombre) throws RemoteException {
         return jugador1.getNombre().equals(nombre);
     }
 
-    public String turnoJugador () {
+    public String turnoJugador () throws RemoteException {
         return jugador1.getNombre();
     }
 
-    public void agregarFichas (ArrayList<IFicha> fichas) {
+    public void agregarFichas (ArrayList<IFicha> fichas) throws RemoteException {
         Jugador jugador = jugadorEnTurno();
         ArrayList<IFicha> Jfichas = jugador.getFichas();
         Jfichas.addAll(fichas);
         jugador.setFichas(Jfichas);
     }
 
-    public void agregarFichas (IFicha ficha) {
+    public void agregarFichas (IFicha ficha) throws RemoteException {
         Jugador jugador = jugadorEnTurno();
         ArrayList<IFicha> Jfichas = jugador.getFichas();
         Jfichas.add(ficha);
         jugador.setFichas(Jfichas);
     }
 
-    public void agarrarPozo(int id, ArrayList<IFicha> pozo) {
+    public void agarrarPozo(int id, ArrayList<IFicha> pozo) throws RemoteException {
         Jugador jugador = jugadorEnTurno();
         if (jugador.getId() == id && jugador.getEstadoTurno() == 2) {
             agregarFichas(pozo);
@@ -73,7 +74,7 @@ public class Equipo {
         }
     }
 
-    public void agarrarMazo (int id, IFicha ficha) {
+    public void agarrarMazo (int id, IFicha ficha) throws RemoteException {
         Jugador jugador = jugadorEnTurno();
         if (jugador.getId() == id && jugador.getEstadoTurno() == 2) {
             agregarFichas(ficha);
@@ -81,12 +82,12 @@ public class Equipo {
         }
     }
 
-    public void setEstadoTurno(int estado) {
+    public void setEstadoTurno(int estado) throws RemoteException {
         Jugador jugador = jugadorEnTurno();
         jugador.setEstadoTurno(estado);
     }
 
-    public Jugador getJugador (String nombre) {
+    public Jugador getJugador (String nombre) throws RemoteException {
         Jugador jugador = jugadorEnTurno();
         if (jugador.getNombre().equals(nombre)) {
             return jugador;
@@ -95,12 +96,12 @@ public class Equipo {
         }
     }
 
-    public IFicha soltarFicha(int f) {
+    public IFicha soltarFicha(int f) throws RemoteException {
         Jugador jugador = jugadorEnTurno();
         return jugador.soltarFicha(f);
     }
 
-    public void combinacion (ArrayList<Integer> posiciones) {
+    public void combinacion (ArrayList<Integer> posiciones) throws RemoteException {
         Jugador jugador = jugadorEnTurno();
         Combinacion combinacion = jugador.combinacion(posiciones);
         if (combinacion != null) {
@@ -114,7 +115,7 @@ public class Equipo {
         }
     }
 
-    public void agregarFichaComb (int c, int f) {
+    public void agregarFichaComb (int c, int f) throws RemoteException {
         Jugador jugador = jugadorEnTurno();
         Combinacion combinacion = combinaciones.get(c);
         if (combinacion.agregarFicha(jugador.getFichas().get(f))) {
@@ -126,19 +127,19 @@ public class Equipo {
         }
     }
 
-    public boolean sinFichas () {
+    public boolean sinFichas () throws RemoteException {
         return jugadorEnTurno().getFichas().isEmpty();
     }
 
-    public void setMuerto (ArrayList<IFicha> muerto) {
+    public void setMuerto (ArrayList<IFicha> muerto) throws RemoteException {
         agregarFichas(muerto);
     }
 
-    public int getScore () {
+    public int getScore () throws RemoteException {
         return this.score;
     }
 
-    public String listarJugadores () {
+    public String listarJugadores () throws RemoteException {
         return jugador1.getNombre();
     }
 }
