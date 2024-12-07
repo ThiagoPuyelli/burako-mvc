@@ -13,4 +13,5 @@ public interface IJugador {
   void setEstadoTurno(int estadoTurno) throws RemoteException;
   ArrayList<IFicha> getFichas () throws RemoteException;
   IFicha soltarFicha (int f) throws RemoteException;
+  ICombinacion combinacion (ArrayList<Integer> posiciones) throws RemoteException;
 }

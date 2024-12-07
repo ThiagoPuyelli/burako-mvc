@@ -6,6 +6,7 @@ import Vista.IVista;
 import ar.edu.unlu.rmimvc.RMIMVCException;
 import ar.edu.unlu.rmimvc.Util;
 import ar.edu.unlu.rmimvc.cliente.Cliente;
+import modelo.Equipo;
 import modelo.Jugador;
 
 import javax.swing.*;
@@ -55,13 +56,23 @@ public class AppCliente {
                 null,
                 "pito"
         );
-        Jugador jugador = new Jugador(nombreJugador);
+        String equipo = (String) JOptionPane.showInputDialog(
+                null,
+                "Diga el equipo en el que juega", "Numero de equipo (1 o 2)",
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                null,
+                "1"
+        );
+        //Jugador jugador = new Jugador(nombreJugador);
         Controlador controlador = new Controlador();
-        controlador.setJugador(jugador);
         IVista vista = new ConsoleGUI(controlador);
+        controlador.setVista(vista);
+        System.out.println(ip + " " + Integer.parseInt(port) + " " + ipServidor + " " + Integer.parseInt(portServidor));
         Cliente cliente = new Cliente(ip, Integer.parseInt(port), ipServidor, Integer.parseInt(portServidor));
         vista.iniciar(); // muestra la vista gráfica
         try {
+            controlador.setJugador(nombreJugador, Integer.parseInt(equipo));
             cliente.iniciar(controlador); // enlaza el controlador con el modelo remoto
         } catch (RemoteException e) {
             // error de conexión

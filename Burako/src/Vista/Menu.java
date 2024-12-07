@@ -37,7 +37,7 @@ public class Menu extends JFrame {
         boton1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Tablero tablero = new Tablero();
+                Tablero tablero = new Tablero(1);
                 VistaNombre nombre1 = new VistaNombre(tablero);
                 VistaNombre nombre2 = new VistaNombre(tablero);
                 nombre1.setVisible(true);
@@ -49,7 +49,7 @@ public class Menu extends JFrame {
         boton2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Tablero tablero = new Tablero();
+                Tablero tablero = new Tablero(2);
                 VistaNombreDuo nombre1 = new VistaNombreDuo(tablero);
                 VistaNombreDuo nombre2 = new VistaNombreDuo(tablero);
                 nombre1.setVisible(true);

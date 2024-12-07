@@ -3,7 +3,6 @@ package Vista.Consola;
 import Controlador.Controlador;
 import Vista.IVista;
 import Vista.VistaPlay;
-import modelo.*;
 
 import javax.swing.*;
 import javax.swing.text.BadLocationException;
@@ -11,6 +10,7 @@ import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 import java.awt.*;
+import modelo.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.rmi.RemoteException;
@@ -40,6 +40,7 @@ public class ConsoleGUI extends VistaPlay implements IVista  {
         JPanel panel = new JPanel();
         panel.add(inputField);
         panel.add(sendButton);
+        System.out.println("GHOLA " + controlador);
 
         frame.add(scrollPane, BorderLayout.CENTER);
         frame.add(panel, BorderLayout.SOUTH);
@@ -49,6 +50,9 @@ public class ConsoleGUI extends VistaPlay implements IVista  {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String inputText = inputField.getText();
+                if (inputText.startsWith("iniciar")) {
+                    iniciarControlador();
+                }
                     if (!terminaPartida && inicioPartida) {
                         if (inputText.startsWith("agarrar")) {
                             agarrarDelMazo(inputText);
@@ -71,6 +75,13 @@ public class ConsoleGUI extends VistaPlay implements IVista  {
     public void iniciarPartida () {
         inicioPartida = true;
     }
+
+    public void iniciarControlador () {
+        System.out.println("PEPE");
+        agregarTexto("Momento prueba", Color.BLACK);
+        controlador.conectarJugador();
+        controlador.iniciarPartida();
+    }
     private void vaciarContenido () {
         try {
             doc.remove(0, doc.getLength());
@@ -91,6 +102,7 @@ public class ConsoleGUI extends VistaPlay implements IVista  {
     }
 
     public void mostrarTurno (String nombre) {
+        System.out.println("DALEEE");
         vaciarContenido();
         agregarTexto("Jugador " + controlador.getNombre() + "\n", Color.BLACK);
         agregarTexto("Turno de " + nombre, Color.BLACK);
@@ -101,10 +113,13 @@ public class ConsoleGUI extends VistaPlay implements IVista  {
             agregarTexto(" juega", Color.BLACK);
         }
         agregarTexto("\n", Color.BLACK);
+        System.out.println("DALEEE 2");
     }
     public void mostrarFichas () {
         agregarTexto("Fichas: ", Color.BLACK);
         int i = 1;
+        System.out.println("SOY GAY");
+        System.out.println(controlador);
         for (IFicha f : controlador.getFichas()) {
             //agregarTexto(i + ". ", Color.LIGHT_GRAY);
             mostrarFicha(f);

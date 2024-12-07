@@ -1,5 +1,6 @@
 package modelo;
 
+import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -7,7 +8,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class FabricaCombinacion {
+public class FabricaCombinacion implements Serializable {
     public static Combinacion crearCombinacion (ArrayList<IFicha> combinacion) {
 
         int comodines = contarComodines(combinacion);

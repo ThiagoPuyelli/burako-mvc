@@ -1,8 +1,9 @@
 package modelo;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Pierna extends Combinacion {
+public class Pierna extends Combinacion implements Serializable {
 
     public Pierna (ArrayList<IFicha> fichas) {
         super(fichas);

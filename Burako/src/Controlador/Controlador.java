@@ -1,5 +1,6 @@
 package Controlador;
 
+import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -12,10 +13,22 @@ import modelo.*;
 public class Controlador implements IControladorRemoto {
   ITablero tablero;
   IJugador jugador;
+  String nombreJugador;
+  int equipo;
   IVista vista;
 
-  public void setJugador (IJugador jugador) {
-    this.jugador = jugador;
+  public void setJugador (String jugador, int equipo)  {
+    this.nombreJugador = jugador;
+    this.equipo = equipo;
+  }
+
+  public void conectarJugador () {
+      try {
+          System.out.println("DALE GORDO");
+          this.jugador = tablero.agregarJugador(nombreJugador, equipo);
+      } catch (RemoteException e) {
+          throw new RuntimeException(e);
+      }
   }
   public String getNombre () {
       try {
@@ -24,7 +37,7 @@ public class Controlador implements IControladorRemoto {
           throw new RuntimeException(e);
       }
   }
-  public void actualizar (Object valor) {
+  /*public void actualizar (Object valor) {
     if (valor instanceof Eventos) {
       if (valor == Eventos.INICIAR_PARTIDA) {
         vista.iniciarPartida();
@@ -39,18 +52,18 @@ public class Controlador implements IControladorRemoto {
         vista.terminarPartida();
       }
     }
-  }
+  }*/
   public void setVista (IVista vista) { this.vista = vista; }
   public void iniciarPartida () {
       try {
-          tablero.setStart(true);
-          tablero.notificarObservadores(Eventos.ACTUALIZAR_PARTIDA);
+          tablero.iniciarPartida();
       } catch (RemoteException e) {
           throw new RuntimeException(e);
       }
   }
   public void mostrarTurno () {
       try {
+          System.out.println("FRANCO HACE EL COITO");
           vista.mostrarTurno(tablero.getTurno());
       } catch (RemoteException e) {
           throw new RuntimeException(e);
@@ -180,8 +193,10 @@ public class Controlador implements IControladorRemoto {
 
   @Override
   public void actualizar(IObservableRemoto iObservableRemoto, Object valor) throws RemoteException {
+      System.out.println("HOLIWIIIISS " + valor);
     if (valor instanceof Eventos) {
       if (valor == Eventos.INICIAR_PARTIDA) {
+        System.out.println("HOLA" + vista);
         vista.iniciarPartida();
         mostrarTurno();
         mostrarFichas();
@@ -193,6 +208,11 @@ public class Controlador implements IControladorRemoto {
       } else if (valor == Eventos.TERMINAR_PARTIDA) {
         vista.terminarPartida();
       }
+    } else if (valor instanceof IJugador) {
+        this.jugador = (IJugador) valor;
+        vista.iniciarPartida();
+        mostrarTurno();
+        mostrarFichas();
     }
   }
 }

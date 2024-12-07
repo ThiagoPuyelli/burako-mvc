@@ -50,11 +50,11 @@ public class VistaNombre extends JFrame {
                     JOptionPane.showMessageDialog(null, "Nombre invalido");
                 } else {
                     Jugador jugador = new Jugador(nombre);
-                    Equipo equipo = new Equipo(jugador);
+                    Equipo equipo = new Equipo();
                     try {
                         Controlador controlador = new Controlador();
                         ConsoleGUI consola = new ConsoleGUI(controlador);
-                        controlador.setJugador(jugador);
+                        controlador.setJugador("pepe", 1);
                         controlador.setVista(consola);
                         consola.iniciar();
                         setVisible(false);

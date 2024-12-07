@@ -2,26 +2,33 @@ package modelo;
 
 import ar.edu.unlu.rmimvc.observer.ObservableRemoto;
 
+import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 
-public class Tablero extends ObservableRemoto implements ITablero {
-  ArrayList<IObserver> observers = new ArrayList<IObserver>();
-  ArrayList<IFicha> mazo = new ArrayList<>();
-  ArrayList<IFicha> pozo = new ArrayList<>();
-  IFicha[] muerto1 = new IFicha[11];
-  IFicha[] muerto2 = new IFicha[11];
-  Equipo equipo1;
-  Equipo equipo2;
-  String turno;
-  String ganador;
-  boolean start = false;
+public class Tablero extends ObservableRemoto implements ITablero, Serializable {
+  private ArrayList<IFicha> mazo = new ArrayList<>();
+  private ArrayList<IFicha> pozo = new ArrayList<>();
+  private IFicha[] muerto1 = new IFicha[11];
+  private IFicha[] muerto2 = new IFicha[11];
+  private Equipo equipo1;
+  private Equipo equipo2;
+  private String turno;
+  private String ganador;
+  private boolean start = false;
 
-  public Tablero () {
+  public Tablero (int cantJugadores) {
     generarMazo();
     generarMuertos();
+    if (cantJugadores == 1) {
+      equipo1 = new Equipo();
+      equipo2 = new Equipo();
+    } else {
+      equipo1 = new EquipoDuo();
+      equipo2 = new EquipoDuo();
+    }
   }
 
   public ArrayList<IFicha> getPozo () throws RemoteException {
@@ -68,6 +75,27 @@ public class Tablero extends ObservableRemoto implements ITablero {
     return fichas;
   }
 
+  public IJugador agregarJugador (String jugador, int equipo) throws RemoteException {
+    IJugador newJugador = new Jugador(jugador);
+    if (equipo == 1) {
+      equipo1.agregarJugador(newJugador);
+    } else {
+      equipo2.agregarJugador(newJugador);
+    }
+
+    return newJugador;
+  }
+
+  public void iniciarPartida () throws RemoteException {
+    System.out.println("DALEEEEEEE");
+    System.out.println(equipo1.lleno() + " " + equipo2.lleno());
+    if (equipo1.lleno() && equipo2.lleno()) {
+      System.out.println(equipo1.listarJugadores() + " : " + equipo2.listarJugadores());
+      notificarObservadores(Eventos.INICIAR_PARTIDA);
+    }
+  }
+
+  // PROXIMO A ELIMINAR
   public void setEquipos (Equipo eq) throws RemoteException {
     if (equipo1 == null) {
       equipo1 = eq;
@@ -79,15 +107,6 @@ public class Tablero extends ObservableRemoto implements ITablero {
     }
   }
 
-  public void agregarObservador (IObserver observer) throws RemoteException {
-    this.observers.add(observer);
-  }
-
-  public void notificarObservadores (Object valor) throws RemoteException {
-    for (IObserver o : observers) {
-      o.actualizar(valor);
-    }
-  }
 
   protected void generarFichasEquipos () throws RemoteException {
     if (equipo1.getClass() == Equipo.class) {
@@ -159,8 +178,8 @@ public class Tablero extends ObservableRemoto implements ITablero {
     notificarObservadores(Eventos.ACTUALIZAR_PARTIDA);
   }
 
-  public Jugador getJugador (String nombre) throws RemoteException {
-    Jugador jugador = equipo1.getJugador(nombre);
+  public IJugador getJugador (String nombre) throws RemoteException {
+    IJugador jugador = equipo1.getJugador(nombre);
     if (jugador == null) {
       jugador = equipo2.getJugador(nombre);
     }

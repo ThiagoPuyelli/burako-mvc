@@ -55,16 +55,16 @@ public class VistaNombreDuo extends JFrame {
                 } else {
                     Jugador jugador1 = new Jugador(nombre1);
                     Jugador jugador2 = new Jugador(nombre2);
-                    EquipoDuo equipo = new EquipoDuo(jugador1, jugador2);
+                    EquipoDuo equipo = new EquipoDuo();
                     Controlador controlador1 = new Controlador();
                     ConsoleGUI consola1 = new ConsoleGUI(controlador1);
                     controlador1.setVista(consola1);
-                    controlador1.setJugador(jugador1);
+                    controlador1.setJugador("pepe", 1);
                     consola1.iniciar();
                     Controlador controlador2 = new Controlador();
                     ConsoleGUI consola2 = new ConsoleGUI(controlador2);
                     controlador2.setVista(consola2);
-                    controlador2.setJugador(jugador2);
+                    controlador2.setJugador("pepe2", 1);
                     consola2.iniciar();
                     setVisible(false);
                     try {

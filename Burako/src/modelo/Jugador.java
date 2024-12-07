@@ -35,7 +35,7 @@ public class Jugador implements IJugador, Serializable {
     return fichas.remove(f);
   }
 
-  public Combinacion combinacion (ArrayList<Integer> posiciones) throws RemoteException {
+  public ICombinacion combinacion (ArrayList<Integer> posiciones) throws RemoteException {
     ArrayList<IFicha> fichasComb = new ArrayList<>();
     for (Integer p : posiciones) {
       fichasComb.add(fichas.get(p));
@@ -45,7 +45,7 @@ public class Jugador implements IJugador, Serializable {
       System.out.print(f.getNumero() + " ");
     }
     System.out.print("\n");
-    Combinacion comb = FabricaCombinacion.crearCombinacion(fichasComb);
+    ICombinacion comb = FabricaCombinacion.crearCombinacion(fichasComb);
 
     if (comb == null) {
       return null;

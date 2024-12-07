@@ -1,15 +1,18 @@
 package modelo;
 
+import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 
-public class EquipoDuo extends Equipo {
-    private Jugador jugador2;
+public class EquipoDuo extends Equipo implements Serializable {
+    private IJugador jugador2;
     private int turnoJugador = 0;
 
-    public EquipoDuo (Jugador jugador1, Jugador jugador2) {
-        super(jugador1);
-        this.jugador2 = jugador2;
+    @Override
+    public void agregarJugador(IJugador jugador) throws RemoteException {
+        if (jugador1 != null) {
+            jugador2 = jugador;
+        }
     }
 
     public void setFichas (ArrayList<IFicha> fichas) throws RemoteException {
@@ -24,7 +27,7 @@ public class EquipoDuo extends Equipo {
         return jugador1.getNombre().equals(nombre) || jugador2.getNombre().equals(nombre);
     }
 
-    private Jugador jugadorEnTurno () {
+    private IJugador jugadorEnTurno () {
         if (turnoJugador == 0) {
             return jugador1;
         } else {
@@ -47,7 +50,7 @@ public class EquipoDuo extends Equipo {
         }
     }
 
-    public Jugador getJugador (String nombre) throws RemoteException {
+    public IJugador getJugador (String nombre) throws RemoteException {
         if (jugador1.getNombre().equals(nombre)) {
             return jugador1;
         } else if (jugador2.getNombre().equals(nombre)) {
@@ -74,7 +77,7 @@ public class EquipoDuo extends Equipo {
     }
 
     public void setMuerto (ArrayList<IFicha> muerto) throws RemoteException {
-        Jugador jugador;
+        IJugador jugador;
         if (jugador1.getFichas().isEmpty()) {
             jugador = jugador1;
         } else {
@@ -91,5 +94,9 @@ public class EquipoDuo extends Equipo {
 
     public String listarJugadores () throws RemoteException {
         return jugador1.getNombre() + " " + jugador2.getNombre();
+    }
+
+    public boolean lleno () {
+        return jugador1 != null && jugador2 != null;
     }
 }

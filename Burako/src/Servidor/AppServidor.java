@@ -29,7 +29,7 @@ public class AppServidor {
                 null,
                 8888
         );
-        Tablero modelo = new Tablero();
+        Tablero modelo = new Tablero(1);
         Servidor servidor = new Servidor(ip, Integer.parseInt(port));
         try {
             servidor.iniciar(modelo);
