@@ -1,11 +1,12 @@
-import Controlador.Controlador;
-import Vista.Consola.ConsoleGUI;
-import Vista.Menu;
-import modelo.*;
+
+import Vista.Menus.MenusCliente.MenuCliente;
+import Vista.Menus.MenusServidor.MenuServidor;
 
 public class App {
     public static void main(String[] args) {
-      Menu menu = new Menu();
-      menu.setVisible(true);
+      //Menu menu = new Menu();
+      //menu.setVisible(true);
+        //MenuCliente menuCliente = new MenuCliente();
+        //menuCliente.setVisible(true);
     }
 }

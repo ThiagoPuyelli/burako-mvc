@@ -2,7 +2,6 @@ package Vista;
 
 import Controlador.Controlador;
 import Vista.Consola.ConsoleGUI;
-import modelo.EquipoDuo;
 import modelo.Jugador;
 import modelo.Tablero;
 
@@ -55,22 +54,22 @@ public class VistaNombreDuo extends JFrame {
                 } else {
                     Jugador jugador1 = new Jugador(nombre1);
                     Jugador jugador2 = new Jugador(nombre2);
-                    EquipoDuo equipo = new EquipoDuo();
+                    //EquipoDuo equipo = new EquipoDuo();
                     Controlador controlador1 = new Controlador();
                     ConsoleGUI consola1 = new ConsoleGUI(controlador1);
                     controlador1.setVista(consola1);
-                    controlador1.setJugador("pepe", 1);
+                    controlador1.setJugador("pepe");
                     consola1.iniciar();
                     Controlador controlador2 = new Controlador();
                     ConsoleGUI consola2 = new ConsoleGUI(controlador2);
                     controlador2.setVista(consola2);
-                    controlador2.setJugador("pepe2", 1);
+                    controlador2.setJugador("pepe2");
                     consola2.iniciar();
                     setVisible(false);
                     try {
                         tablero.agregarObservador(controlador2);
                         tablero.agregarObservador(controlador1);
-                        tablero.setEquipos(equipo);
+                        //tablero.setEquipos(equipo);
                     } catch (RemoteException ex) {
                         throw new RuntimeException(ex);
                     }

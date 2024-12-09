@@ -8,15 +8,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public class Jugador implements IJugador, Serializable {
-  private static int ID = 0;
-  private int id;
   private String nombre;
   private ArrayList<IFicha> fichas;
   private int estadoTurno = 0;
 
   public Jugador (String nombre) {
-    this.id = ID;
-    ID++;
     this.nombre = nombre;
   }
   public void setFichas (ArrayList<IFicha> fichas) throws RemoteException {
@@ -28,7 +24,6 @@ public class Jugador implements IJugador, Serializable {
   public void setEstadoTurno(int estadoTurno) throws RemoteException {
     this.estadoTurno = estadoTurno;
   }
-  public int getId () throws RemoteException { return id; };
   public String getNombre () throws RemoteException { return nombre; }
   public ArrayList<IFicha> getFichas () throws RemoteException { return this.fichas; };
   public IFicha soltarFicha (int f) throws RemoteException {

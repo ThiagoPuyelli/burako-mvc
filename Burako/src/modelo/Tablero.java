@@ -1,5 +1,7 @@
 package modelo;
 
+import Services.RankingScheme;
+import Services.RankingSerializador;
 import ar.edu.unlu.rmimvc.observer.ObservableRemoto;
 
 import java.io.Serializable;
@@ -9,30 +11,40 @@ import java.util.Collections;
 import java.util.Random;
 
 public class Tablero extends ObservableRemoto implements ITablero, Serializable {
-  private ArrayList<IFicha> mazo = new ArrayList<>();
-  private ArrayList<IFicha> pozo = new ArrayList<>();
-  private IFicha[] muerto1 = new IFicha[11];
-  private IFicha[] muerto2 = new IFicha[11];
+  private Mazo mazo;
+  private Pozo pozo = new Pozo();
+  //private IFicha[] muerto1 = new IFicha[11];
+  //private IFicha[] muerto2 = new IFicha[11];
   private Equipo equipo1;
   private Equipo equipo2;
   private String turno;
   private String ganador;
   private boolean start = false;
 
-  public Tablero (int cantJugadores) {
-    generarMazo();
-    generarMuertos();
-    if (cantJugadores == 1) {
-      equipo1 = new Equipo();
-      equipo2 = new Equipo();
-    } else {
-      equipo1 = new EquipoDuo();
-      equipo2 = new EquipoDuo();
-    }
+  public Tablero () throws RemoteException {
+    mazo = GeneradorPartida.generarMazo();
+
+  }
+
+  public void setCantJugadores (int cantJugadores) throws RemoteException {
+    equipo1 = new Equipo(cantJugadores, mazo, pozo);
+    equipo2 = new Equipo(cantJugadores, mazo, pozo);
   }
 
   public ArrayList<IFicha> getPozo () throws RemoteException {
-    return this.pozo;
+    return this.pozo.verFichas();
+  }
+
+  public ArrayList<RankingScheme> getRanking () throws RemoteException {
+    return RankingSerializador.obtenerPrimeros10();
+  }
+
+  public ArrayList<IFicha> getFichas (String nombre) throws RemoteException {
+    IJugador jugador = equipo1.getJugador(nombre);
+    if (jugador == null) {
+      jugador = equipo2.getJugador(nombre);
+    }
+    return jugador.getFichas();
   }
 
   public boolean getStart () throws RemoteException {
@@ -46,44 +58,13 @@ public class Tablero extends ObservableRemoto implements ITablero, Serializable 
     return turno;
   }
 
-  private void generarMazo () {
-    for (ColorFicha c : ColorFicha.values()) {
-      for (int i = 1;i <= 13;i++) {
-        mazo.add(new Ficha(c, i));
-        mazo.add(new Ficha(c, i));
-        Ficha.ID++;
-      }
-    }
-    Ficha.ID++;
-    mazo.add(new Ficha(ColorFicha.rojo, 50));
-    mazo.add(new Ficha(ColorFicha.azul, 50));
-    Collections.shuffle(mazo);
-  }
-
-  private void generarMuertos () {
-    for (int i = 0;i < 11;i++) {
-      muerto1[i] = this.obtenerFicha();
-      muerto2[i] = this.obtenerFicha();
-    }
-  }
-
-  private ArrayList<IFicha> obtenerFichas (int cantidad) {
-    ArrayList<IFicha> fichas = new ArrayList<>();
-    for (int i = 0;i < cantidad;i++) {
-      fichas.add(this.obtenerFicha());
-    }
-    return fichas;
-  }
-
-  public IJugador agregarJugador (String jugador, int equipo) throws RemoteException {
+  public void agregarJugador (String jugador, int equipo) throws RemoteException {
     IJugador newJugador = new Jugador(jugador);
     if (equipo == 1) {
       equipo1.agregarJugador(newJugador);
     } else {
       equipo2.agregarJugador(newJugador);
     }
-
-    return newJugador;
   }
 
   public void iniciarPartida () throws RemoteException {
@@ -91,6 +72,8 @@ public class Tablero extends ObservableRemoto implements ITablero, Serializable 
     System.out.println(equipo1.lleno() + " " + equipo2.lleno());
     if (equipo1.lleno() && equipo2.lleno()) {
       System.out.println(equipo1.listarJugadores() + " : " + equipo2.listarJugadores());
+      //this.generarFichasEquipos();
+      this.elegirTurno();
       notificarObservadores(Eventos.INICIAR_PARTIDA);
     }
   }
@@ -101,39 +84,40 @@ public class Tablero extends ObservableRemoto implements ITablero, Serializable 
       equipo1 = eq;
     } else {
       equipo2 = eq;
-      this.generarFichasEquipos();
+      //this.generarFichasEquipos();
       this.elegirTurno();
       notificarObservadores(Eventos.INICIAR_PARTIDA);
     }
   }
 
-
-  protected void generarFichasEquipos () throws RemoteException {
-    if (equipo1.getClass() == Equipo.class) {
-        equipo1.setFichas(this.obtenerFichas(12));
-        equipo2.setFichas(this.obtenerFichas(12));
-    } else {
-        equipo1.setFichas(this.obtenerFichas(11));
-        equipo1.setFichas(this.obtenerFichas(11));
-        equipo2.setFichas(this.obtenerFichas(11));
-        equipo2.setFichas(this.obtenerFichas(11));
-    }
-  }
+  //protected void generarFichasEquipos () throws RemoteException {
+  //  equipo1.generarFichas(mazo);
+  //  equipo2.generarFichas(mazo);
+  //  //if (equipo1.getClass() == Equipo.class) {
+  //  //    equipo1.setFichas(this.obtenerFichas(12));
+  //  //    equipo2.setFichas(this.obtenerFichas(12));
+  //  //} else {
+  //  //    equipo1.setFichas(this.obtenerFichas(11));
+  //  //    equipo1.setFichas(this.obtenerFichas(11));
+  //  //    equipo2.setFichas(this.obtenerFichas(11));
+  //  //    equipo2.setFichas(this.obtenerFichas(11));
+  //  //}
+  //}
 
   private void elegirTurno () throws RemoteException {
-    Random random = new Random();
-    int value = random.nextInt(2);
-    if (value == 0) {
+    //Random random = new Random();
+    //int value = random.nextInt(2);
+    //if (value == 0) {
       equipo1.setTurno(true);
       this.turno = equipo1.turnoJugador();
-    } else {
-      equipo2.setTurno(true);
-      this.turno = equipo2.turnoJugador();
-    }
+    //} else {
+    //  equipo2.setTurno(true);
+    //  this.turno = equipo2.turnoJugador();
+    //}
   }
 
   private IFicha obtenerFicha () {
-    return this.mazo.remove(0);
+    return mazo.obtenerFicha();
   }
 
   public ArrayList<ICombinacion> getCombinaciones (String nombre) throws RemoteException {
@@ -164,17 +148,16 @@ public class Tablero extends ObservableRemoto implements ITablero, Serializable 
     }
   }
 
-  public void agarrarPozo (int id) throws RemoteException {
-    equipo1.agarrarPozo(id, pozo);
-    equipo2.agarrarPozo(id, pozo);
-    pozo.clear();
+  public void agarrarPozo (String nombre) throws RemoteException {
+    equipo1.agarrarPozo(nombre);
+    equipo2.agarrarPozo(nombre);
     notificarObservadores(Eventos.ACTUALIZAR_PARTIDA);
   }
 
-  public void agarrarMazo (int id) throws RemoteException {
+  public void agarrarMazo (String nombre) throws RemoteException {
     IFicha ficha = this.obtenerFicha();
-    equipo1.agarrarMazo(id, ficha);
-    equipo2.agarrarMazo(id, ficha);
+    equipo1.agarrarMazo(nombre);
+    equipo2.agarrarMazo(nombre);
     notificarObservadores(Eventos.ACTUALIZAR_PARTIDA);
   }
 
@@ -198,12 +181,14 @@ public class Tablero extends ObservableRemoto implements ITablero, Serializable 
       equipo2.setTurno(true);
       turno = equipo2.turnoJugador();
     }
-    pozo.add(eq.soltarFicha(f));
+    eq.soltarFicha(f);
     actualizarMuertos();
     notificarObservadores(Eventos.ACTUALIZAR_PARTIDA);
   }
 
   public void combinacion (ArrayList<Integer> posiciones) throws RemoteException {
+    //System.out.println("Combinacion Equipo1: " + equipo1.listarJugadores() + " " + equipo1.getTurno());
+    //System.out.println("Combinacion Equipo2: " + equipo2.listarJugadores() + " " + equipo2.getTurno());
     if (equipo1.getTurno()) {
       equipo1.combinacion(posiciones);
     } else {
@@ -226,47 +211,49 @@ public class Tablero extends ObservableRemoto implements ITablero, Serializable 
   }
 
   public void actualizarMuertos () throws RemoteException {
-    if (equipo1.sinFichas()) {
-      if (muerto1[0] != null) {
-        ArrayList<IFicha> muertoAct = new ArrayList<>();
-        int i = 0;
-        for (IFicha m : muerto1) {
-          muertoAct.add(m);
-          muerto1[i] = null;
-          i++;
-        }
-        equipo1.setMuerto(muertoAct);
-        notificarObservadores(Eventos.ACTUALIZAR_PARTIDA);
-        notificarObservadores(Eventos.SET_MUERTO);
-      } else {
+    boolean set1 = equipo1.actualizarMuertos();
+    boolean set2 = equipo2.actualizarMuertos();
+    if (set1 || set2) {
+      notificarObservadores(Eventos.ACTUALIZAR_PARTIDA);
+      notificarObservadores(Eventos.SET_MUERTO);
+    } else if (equipo1.sinFichas() || equipo2.sinFichas()) {
+      ganador = equipo2.listarJugadores();
+      Equipo eqGanador = equipo1;
+      Equipo eqPerdedor = equipo2;
+
+      if (equipo2.sinFichas()) {
         ganador = equipo1.listarJugadores();
-        notificarObservadores(Eventos.TERMINAR_PARTIDA);
+        eqGanador = equipo1;
+        eqPerdedor = equipo2;
       }
-    } else if (equipo2.sinFichas()) {
-      if (muerto2[0] != null) {
-        ArrayList<IFicha> muertoAct = new ArrayList<>();
-        int i = 0;
-        for (IFicha m : muerto2) {
-          muertoAct.add(m);
-          muerto2[i] = null;
-          i++;
-        }
-        equipo2.setMuerto(muertoAct);
-        notificarObservadores(Eventos.ACTUALIZAR_PARTIDA);
-        notificarObservadores(Eventos.SET_MUERTO);
-      } else {
-        ganador = equipo2.listarJugadores();
-        notificarObservadores(Eventos.TERMINAR_PARTIDA);
-      }
+
+      actualizarRanking(eqGanador, eqPerdedor);
+
+      notificarObservadores(Eventos.TERMINAR_PARTIDA);
+    }
+  }
+
+  private void actualizarRanking (Equipo ganador, Equipo perdedor) throws RemoteException {
+    ArrayList<String> ganadores = ganador.getNombreJugadores();
+    ArrayList<String> perdedores = perdedor.getNombreJugadores();
+
+    for (String s : ganadores) {
+      RankingSerializador.cargarJugador(s, 1);
+    }
+
+    for (String s : perdedores) {
+      RankingSerializador.cargarJugador(s, 0);
     }
   }
 
   private void verificarScoreWin () throws RemoteException {
     if (equipo1.getScore() >= 100) {
       ganador = equipo1.listarJugadores();
+      actualizarRanking(equipo1, equipo2);
       notificarObservadores(Eventos.TERMINAR_PARTIDA);
     } else if (equipo2.getScore() >= 100) {
       ganador = equipo2.listarJugadores();
+      actualizarRanking(equipo2, equipo1);
       notificarObservadores(Eventos.TERMINAR_PARTIDA);
     }
   }

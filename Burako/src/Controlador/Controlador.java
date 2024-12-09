@@ -5,6 +5,7 @@ import java.rmi.RemoteException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
+import Services.RankingScheme;
 import Vista.IVista;
 import ar.edu.unlu.rmimvc.cliente.IControladorRemoto;
 import ar.edu.unlu.rmimvc.observer.IObservableRemoto;
@@ -12,30 +13,35 @@ import modelo.*;
 
 public class Controlador implements IControladorRemoto {
   ITablero tablero;
-  IJugador jugador;
+  //IJugador jugador;
+  //int jugadorID;
   String nombreJugador;
   int equipo;
   IVista vista;
 
-  public void setJugador (String jugador, int equipo)  {
+  public void setJugador (String jugador)  {
     this.nombreJugador = jugador;
-    this.equipo = equipo;
+  }
+
+  public void setEquipo (int equipo) {
+      this.equipo = equipo;
   }
 
   public void conectarJugador () {
       try {
           System.out.println("DALE GORDO");
-          this.jugador = tablero.agregarJugador(nombreJugador, equipo);
+          tablero.agregarJugador(nombreJugador, equipo);
       } catch (RemoteException e) {
           throw new RuntimeException(e);
       }
   }
   public String getNombre () {
-      try {
-          return jugador.getNombre();
-      } catch (RemoteException e) {
-          throw new RuntimeException(e);
-      }
+      return nombreJugador;
+      //try {
+      //    return jugador.getNombre();
+      //} catch (RemoteException e) {
+      //    throw new RuntimeException(e);
+      //}
   }
   /*public void actualizar (Object valor) {
     if (valor instanceof Eventos) {
@@ -70,16 +76,18 @@ public class Controlador implements IControladorRemoto {
       }
   }
 
-  public boolean getStart () {
+  public ArrayList<RankingScheme> obtenerRanking () {
       try {
-          return tablero.getStart();
+          return tablero.getRanking();
       } catch (RemoteException e) {
           throw new RuntimeException(e);
       }
   }
+
   public void mostrarFichas () {
     vista.mostrarFichas();
   }
+
   public ArrayList<IFicha> getPozo () {
       try {
           return tablero.getPozo();
@@ -90,7 +98,8 @@ public class Controlador implements IControladorRemoto {
 
   public ArrayList<ICombinacion> getCombinaciones () {
       try {
-          return tablero.getCombinaciones(jugador.getNombre());
+          System.out.println(nombreJugador + " Que gordo este mique");
+          return tablero.getCombinaciones(nombreJugador);
       } catch (RemoteException e) {
           throw new RuntimeException(e);
       }
@@ -98,14 +107,15 @@ public class Controlador implements IControladorRemoto {
 
   public ArrayList<ICombinacion> getCombinacionesContrario () {
       try {
-          return tablero.getCombinacionesContrario(jugador.getNombre());
+          System.out.println(nombreJugador + " Que contrario este mique");
+          return tablero.getCombinacionesContrario(nombreJugador);
       } catch (RemoteException e) {
           throw new RuntimeException(e);
       }
   }
   public ArrayList<IFicha> getFichas () {
       try {
-          return jugador.getFichas();
+          return tablero.getFichas(nombreJugador);
       } catch (RemoteException e) {
           throw new RuntimeException(e);
       }
@@ -113,14 +123,14 @@ public class Controlador implements IControladorRemoto {
 
   public void agarrarPozo () {
       try {
-          tablero.agarrarPozo(jugador.getId());
+          tablero.agarrarPozo(nombreJugador);
       } catch (RemoteException e) {
           throw new RuntimeException(e);
       }
   }
   public void agarrarMazo () {
       try {
-          tablero.agarrarMazo(jugador.getId());
+          tablero.agarrarMazo(nombreJugador);
       } catch (RemoteException e) {
           throw new RuntimeException(e);
       }
@@ -128,7 +138,12 @@ public class Controlador implements IControladorRemoto {
 
   public int getEstadoTurno () {
       try {
-          return jugador.getEstadoTurno();
+          IJugador jugador = tablero.getJugador(nombreJugador);
+          if (jugador != null) {
+              return jugador.getEstadoTurno();
+          } else {
+              return -1;
+          }
       } catch (RemoteException e) {
           throw new RuntimeException(e);
       }
@@ -180,7 +195,15 @@ public class Controlador implements IControladorRemoto {
   }
   public int getScore () {
       try {
-          return tablero.getScore(jugador.getNombre());
+          return tablero.getScore(nombreJugador);
+      } catch (RemoteException e) {
+          throw new RuntimeException(e);
+      }
+  }
+
+  public void setCantJugadores (int cantJugadores) {
+      try {
+          tablero.setCantJugadores(cantJugadores);
       } catch (RemoteException e) {
           throw new RuntimeException(e);
       }
@@ -208,11 +231,11 @@ public class Controlador implements IControladorRemoto {
       } else if (valor == Eventos.TERMINAR_PARTIDA) {
         vista.terminarPartida();
       }
-    } else if (valor instanceof IJugador) {
+    } /*else if (valor instanceof IJugador) {
         this.jugador = (IJugador) valor;
         vista.iniciarPartida();
         mostrarTurno();
         mostrarFichas();
-    }
+    }*/
   }
 }

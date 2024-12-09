@@ -1,19 +1,19 @@
 package modelo;
 
+import Services.RankingScheme;
 import ar.edu.unlu.rmimvc.observer.IObservableRemoto;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 public interface ITablero extends IObservableRemoto {
-    IJugador agregarJugador (String jugador, int equipo) throws RemoteException;
+    void agregarJugador (String jugador, int equipo) throws RemoteException;
     ArrayList<IFicha> getPozo () throws RemoteException;
     ArrayList<ICombinacion> getCombinaciones(String nombre) throws RemoteException;
     String getTurno () throws RemoteException;
     boolean getStart () throws RemoteException;
-    void setStart (boolean start) throws RemoteException;
-    void agarrarPozo (int id) throws RemoteException;
-    void agarrarMazo (int id) throws RemoteException;
+    void agarrarPozo (String nombre) throws RemoteException;
+    void agarrarMazo (String nombre) throws RemoteException;
     IJugador getJugador (String nombre) throws RemoteException;
     void soltarFicha (int f) throws RemoteException;
     void combinacion (ArrayList<Integer> posiciones) throws RemoteException;
@@ -22,4 +22,7 @@ public interface ITablero extends IObservableRemoto {
     String getGanador () throws RemoteException;
     int getScore(String nombre) throws RemoteException;
     void iniciarPartida () throws RemoteException;
+    ArrayList<IFicha> getFichas (String nombre) throws RemoteException;
+    void setCantJugadores (int cantJugadores) throws RemoteException;
+    ArrayList<RankingScheme> getRanking () throws RemoteException;
 }

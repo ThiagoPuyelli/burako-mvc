@@ -6,7 +6,6 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 public interface IJugador {
-  int getId() throws RemoteException;
   String getNombre() throws RemoteException;
   void setFichas (ArrayList<IFicha> fichas) throws RemoteException;
   int getEstadoTurno () throws RemoteException;

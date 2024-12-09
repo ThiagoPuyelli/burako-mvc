@@ -50,6 +50,7 @@ public class ConsoleGUI extends VistaPlay implements IVista  {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String inputText = inputField.getText();
+                System.out.println("TERMINAL");
                 if (inputText.startsWith("iniciar")) {
                     iniciarControlador();
                 }
@@ -119,7 +120,7 @@ public class ConsoleGUI extends VistaPlay implements IVista  {
         agregarTexto("Fichas: ", Color.BLACK);
         int i = 1;
         System.out.println("SOY GAY");
-        System.out.println(controlador);
+        System.out.println(controlador.getFichas());
         for (IFicha f : controlador.getFichas()) {
             //agregarTexto(i + ". ", Color.LIGHT_GRAY);
             mostrarFicha(f);

@@ -5,18 +5,47 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 public class Equipo implements Serializable {
-    protected IJugador jugador1;
+    //protected IJugador jugador1;
+    private Mazo mazo;
+    private Pozo pozo;
+    private ArrayList<IJugador> jugadores = new ArrayList<>();
     protected ArrayList<ICombinacion> combinaciones = new ArrayList<>();
     protected int score = 0;
-    public boolean turno = false;
+    private boolean turno = false;
+    private int turnoJugador = 0;
+    private int tamanio;
+    private IFicha[] muertos;
+
+    public ArrayList<String> getNombreJugadores() throws RemoteException {
+        ArrayList<String> nombres = new ArrayList<>();
+        for (IJugador j : jugadores) {
+            nombres.add(j.getNombre());
+        }
+        return nombres;
+    }
+
+    public Equipo (int tamanio, Mazo mazo, Pozo pozo) throws RemoteException {
+        this.tamanio = tamanio;
+        this.mazo = mazo;
+        generarFichas();
+        this.muertos = GeneradorPartida.generarMuerto(mazo);
+        this.pozo = pozo;
+    }
 
     public boolean lleno () {
-        return jugador1 != null;
+        return jugadores.size() >= tamanio;
     }
-    public void agregarJugador (IJugador jugador) throws RemoteException { this.jugador1 = jugador; }
+    public void agregarJugador (IJugador jugador) throws RemoteException {
+        if (!lleno()) {
+            int cantidadF = tamanio == 1 ? 12 : 11;
+            jugador.setFichas(mazo.obtenerFichas(cantidadF));
+            jugadores.add(jugador);
+        }
+    }
     public boolean getTurno () {
         return turno;
     }
+
     public void setTurno (boolean turno) throws RemoteException {
         this.turno = turno;
         if (turno) {
@@ -40,18 +69,32 @@ public class Equipo implements Serializable {
         }
     }
 
-    private IJugador jugadorEnTurno () { return jugador1; }
-
-    protected void setFichas (ArrayList<IFicha> fichas) throws RemoteException {
-        jugador1.setFichas(fichas);
+    public void generarFichas () throws RemoteException {
+        for (IJugador j : jugadores) {
+            j.setFichas(mazo.obtenerFichas(11));
+        }
     }
 
+    private IJugador jugadorEnTurno () {
+        return jugadores.get(turnoJugador);
+    }
+
+    //protected void setFichas (ArrayList<IFicha> fichas) throws RemoteException {
+    //    jugador1.setFichas(fichas);
+    //}
+
     public boolean verificarJugador (String nombre) throws RemoteException {
-        return jugador1.getNombre().equals(nombre);
+        for (IJugador ju : jugadores) {
+            if (ju.getNombre().equals(nombre)) {
+                return true;
+            }
+        }
+        return false;
+        //return jugador1.getNombre().equals(nombre);
     }
 
     public String turnoJugador () throws RemoteException {
-        return jugador1.getNombre();
+        return jugadorEnTurno().getNombre();
     }
 
     public void agregarFichas (ArrayList<IFicha> fichas) throws RemoteException {
@@ -68,18 +111,18 @@ public class Equipo implements Serializable {
         jugador.setFichas(Jfichas);
     }
 
-    public void agarrarPozo(int id, ArrayList<IFicha> pozo) throws RemoteException {
+    public void agarrarPozo(String nombre) throws RemoteException {
         IJugador jugador = jugadorEnTurno();
-        if (jugador.getId() == id && jugador.getEstadoTurno() == 2) {
-            agregarFichas(pozo);
+        if (jugador.getNombre().equals(nombre) && jugador.getEstadoTurno() == 2) {
+            agregarFichas(pozo.obtenerPozo());
             jugador.setEstadoTurno(1);
         }
     }
 
-    public void agarrarMazo (int id, IFicha ficha) throws RemoteException {
+    public void agarrarMazo (String nombre) throws RemoteException {
         IJugador jugador = jugadorEnTurno();
-        if (jugador.getId() == id && jugador.getEstadoTurno() == 2) {
-            agregarFichas(ficha);
+        if (jugador.getNombre().equals(nombre) && jugador.getEstadoTurno() == 2) {
+            agregarFichas(mazo.obtenerFicha());
             jugador.setEstadoTurno(1);
         }
     }
@@ -87,20 +130,39 @@ public class Equipo implements Serializable {
     public void setEstadoTurno(int estado) throws RemoteException {
         IJugador jugador = jugadorEnTurno();
         jugador.setEstadoTurno(estado);
+        if (estado == 0) {
+            rotarTurno();
+        }
+    }
+
+    private void rotarTurno () {
+        if (turnoJugador < jugadores.size() - 1) {
+            turnoJugador++;
+        } else {
+            turnoJugador = 0;
+        }
     }
 
     public IJugador getJugador (String nombre) throws RemoteException {
-        IJugador jugador = jugadorEnTurno();
-        if (jugador.getNombre().equals(nombre)) {
-            return jugador;
-        } else {
-          return null;
+        for (IJugador ju : jugadores) {
+            if (ju.getNombre().equals(nombre)) {
+                return ju;
+            }
         }
+        return null;
+        //IJugador jugador = jugadorEnTurno();
+        //if (jugador.getNombre().equals(nombre)) {
+        //    return jugador;
+        //} else {
+        //  return null;
+        //}
     }
 
     public IFicha soltarFicha(int f) throws RemoteException {
         IJugador jugador = jugadorEnTurno();
-        return jugador.soltarFicha(f);
+        IFicha ficha = jugador.soltarFicha(f);
+        pozo.agregarFicha(ficha);
+        return ficha;
     }
 
     public void combinacion (ArrayList<Integer> posiciones) throws RemoteException {
@@ -133,8 +195,17 @@ public class Equipo implements Serializable {
         return jugadorEnTurno().getFichas().isEmpty();
     }
 
-    public void setMuerto (ArrayList<IFicha> muerto) throws RemoteException {
-        agregarFichas(muerto);
+    public boolean actualizarMuertos () throws RemoteException {
+        if (sinFichas() && muertos[0] != null) {
+            int i = 0;
+            for (IFicha f : muertos) {
+                agregarFichas(f);
+                muertos[i] = null;
+                i++;
+            }
+            return true;
+        }
+        return false;
     }
 
     public int getScore () throws RemoteException {
@@ -142,6 +213,11 @@ public class Equipo implements Serializable {
     }
 
     public String listarJugadores () throws RemoteException {
-        return jugador1.getNombre();
+        String s = "";
+        for (IJugador j : jugadores) {
+            s += j.getNombre() + " ";
+        }
+        return s;
     }
+
 }

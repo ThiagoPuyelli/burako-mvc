@@ -1,4 +1,4 @@
-package modelo;
+/*package modelo;
 
 import java.io.Serializable;
 import java.rmi.RemoteException;
@@ -100,3 +100,4 @@ public class EquipoDuo extends Equipo implements Serializable {
         return jugador1 != null && jugador2 != null;
     }
 }
+*/
