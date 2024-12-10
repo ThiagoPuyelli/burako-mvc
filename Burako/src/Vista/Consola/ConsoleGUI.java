@@ -90,9 +90,7 @@ public class ConsoleGUI extends VistaPlay implements IVista  {
             e.printStackTrace();
         }
     }
-    public void actualizar (Object valor) {
-        agregarTexto(controlador.getNombre() + ": " + (String) valor, Color.BLACK);
-    }
+
     public void setMuerto () {
         agregarTexto("\nSe agarro una pila muerta", Color.BLACK);
     }

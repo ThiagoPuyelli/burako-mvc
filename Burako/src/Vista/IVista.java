@@ -6,7 +6,6 @@ import modelo.Ficha;
 import java.util.ArrayList;
 
 public interface IVista {
-    void actualizar (Object valor);
     void iniciar();
     void mostrarTurno (String nombre);
     void mostrarFichas ();
