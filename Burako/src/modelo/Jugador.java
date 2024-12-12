@@ -7,7 +7,7 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public class Jugador implements IJugador, Serializable {
+public class Jugador implements IJugador, Serializable, IJugadorProxy {
   private String nombre;
   private ArrayList<IFicha> fichas;
   private int estadoTurno = 0;
@@ -25,6 +25,12 @@ public class Jugador implements IJugador, Serializable {
     this.estadoTurno = estadoTurno;
   }
   public String getNombre () throws RemoteException { return nombre; }
+
+  @Override
+  public int cantFichas() throws RemoteException {
+    return fichas.size();
+  }
+
   public ArrayList<IFicha> getFichas () throws RemoteException { return this.fichas; };
   public IFicha soltarFicha (int f) throws RemoteException {
     return fichas.remove(f);
@@ -46,7 +52,10 @@ public class Jugador implements IJugador, Serializable {
       return null;
     }
     for (IFicha f : fichasComb) {
-      fichas.removeIf(fi -> fi.getId() == f.getId());
+      fichas.stream()
+              .filter(fi -> fi.getNumero() == f.getNumero() && fi.getColor() == f.getColor())
+              .findFirst()
+              .ifPresent(fichas::remove);
     }
     return comb;
     //for (Ficha f : fichasComb) {

@@ -7,4 +7,6 @@ public class VistaPlay {
     public VistaPlay(Controlador controlador) {
         this.controlador = controlador;
     }
+
+
 }

@@ -11,7 +11,6 @@ public interface ITablero extends IObservableRemoto {
     ArrayList<IFicha> getPozo () throws RemoteException;
     ArrayList<ICombinacion> getCombinaciones(String nombre) throws RemoteException;
     String getTurno () throws RemoteException;
-    boolean getStart () throws RemoteException;
     void agarrarPozo (String nombre) throws RemoteException;
     void agarrarMazo (String nombre) throws RemoteException;
     IJugador getJugador (String nombre) throws RemoteException;
@@ -21,8 +20,15 @@ public interface ITablero extends IObservableRemoto {
     ArrayList<ICombinacion> getCombinacionesContrario (String nombre) throws RemoteException;
     String getGanador () throws RemoteException;
     int getScore(String nombre) throws RemoteException;
+    int getScoreContrario(String nombre) throws RemoteException;
     void iniciarPartida () throws RemoteException;
     ArrayList<IFicha> getFichas (String nombre) throws RemoteException;
     void setCantJugadores (int cantJugadores) throws RemoteException;
     ArrayList<RankingScheme> getRanking () throws RemoteException;
+    int cantidadMazo () throws RemoteException;
+    ArrayList<IJugadorProxy> getJugadoresProxy(String nombreJugador) throws RemoteException;
+    boolean getPartidaCreada () throws RemoteException;
+    void setPartidaCreada (boolean partidaCreada) throws RemoteException;
+    boolean equipo1Lleno () throws RemoteException;
+    boolean equipo2Lleno() throws RemoteException;
 }

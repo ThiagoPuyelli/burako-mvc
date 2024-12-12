@@ -27,7 +27,8 @@ public class Equipo implements Serializable {
     public Equipo (int tamanio, Mazo mazo, Pozo pozo) throws RemoteException {
         this.tamanio = tamanio;
         this.mazo = mazo;
-        generarFichas();
+        //generarFichas();
+        System.out.println("Instanciadooo");
         this.muertos = GeneradorPartida.generarMuerto(mazo);
         this.pozo = pozo;
     }
@@ -64,16 +65,18 @@ public class Equipo implements Serializable {
             return 20;
         } else if (f.getNumero() >= 3 && f.getNumero() <= 7) {
             return 5;
+        } else if (f.getNumero() == 50){
+            return 50;
         } else {
             return 10;
         }
     }
 
-    public void generarFichas () throws RemoteException {
-        for (IJugador j : jugadores) {
-            j.setFichas(mazo.obtenerFichas(11));
-        }
-    }
+    //public void generarFichas () throws RemoteException {
+    //    for (IJugador j : jugadores) {
+    //        j.setFichas(mazo.obtenerFichas(11));
+    //    }
+    //}
 
     private IJugador jugadorEnTurno () {
         return jugadores.get(turnoJugador);
@@ -141,6 +144,10 @@ public class Equipo implements Serializable {
         } else {
             turnoJugador = 0;
         }
+    }
+
+    public ArrayList<IJugador> getJugadores () {
+        return jugadores;
     }
 
     public IJugador getJugador (String nombre) throws RemoteException {

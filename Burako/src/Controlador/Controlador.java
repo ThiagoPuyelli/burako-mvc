@@ -13,53 +13,99 @@ import modelo.*;
 
 public class Controlador implements IControladorRemoto {
   ITablero tablero;
-  //IJugador jugador;
-  //int jugadorID;
   String nombreJugador;
   int equipo;
   IVista vista;
 
   public void setJugador (String jugador)  {
-    this.nombreJugador = jugador;
+      this.nombreJugador = jugador;
+  }
+
+  public boolean existeJugador () {
+      try {
+          return tablero.getJugador(nombreJugador) != null;
+      } catch (RemoteException e) {
+          throw new RuntimeException(e);
+      }
   }
 
   public void setEquipo (int equipo) {
       this.equipo = equipo;
   }
 
+  public boolean getPartidaCreada () {
+      try {
+          return tablero.getPartidaCreada();
+      } catch (RemoteException e) {
+          throw new RuntimeException(e);
+      }
+  }
+
+    public boolean equipo1Lleno () {
+        try {
+            return tablero.equipo1Lleno();
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public boolean equipo2Lleno() {
+        try {
+            return tablero.equipo2Lleno();
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+  public void crearPartida () {
+      try {
+          tablero.setPartidaCreada(true);
+      } catch (RemoteException e) {
+          throw new RuntimeException(e);
+      }
+  }
+
   public void conectarJugador () {
       try {
-          System.out.println("DALE GORDO");
           tablero.agregarJugador(nombreJugador, equipo);
       } catch (RemoteException e) {
           throw new RuntimeException(e);
       }
   }
+
+    public void desconectarJugador() {
+        try {
+            tablero.cerrar(this, nombreJugador, equipo);
+            // reinicio el modelo si no hay mas jugadores.
+            if (tablero.getJugadores().isEmpty())
+                tablero.reniciarJuego();
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+  public int cantidadMazo () {
+      try {
+          return tablero.cantidadMazo();
+      } catch (RemoteException e) {
+          throw new RuntimeException(e);
+      }
+  }
+
+  public ArrayList<IJugadorProxy> getJugadoresProxy () {
+      try {
+          return tablero.getJugadoresProxy(nombreJugador);
+      } catch (RemoteException e) {
+          throw new RuntimeException(e);
+      }
+  }
+
   public String getNombre () {
       return nombreJugador;
-      //try {
-      //    return jugador.getNombre();
-      //} catch (RemoteException e) {
-      //    throw new RuntimeException(e);
-      //}
   }
-  /*public void actualizar (Object valor) {
-    if (valor instanceof Eventos) {
-      if (valor == Eventos.INICIAR_PARTIDA) {
-        vista.iniciarPartida();
-        mostrarTurno();
-        mostrarFichas();
-      } else if (valor == Eventos.ACTUALIZAR_PARTIDA) {
-        mostrarTurno();
-        mostrarFichas();
-      } else if (valor == Eventos.SET_MUERTO) {
-        vista.setMuerto();
-      } else if (valor == Eventos.TERMINAR_PARTIDA) {
-        vista.terminarPartida();
-      }
-    }
-  }*/
+
   public void setVista (IVista vista) { this.vista = vista; }
+
   public void iniciarPartida () {
       try {
           tablero.iniciarPartida();
@@ -201,6 +247,14 @@ public class Controlador implements IControladorRemoto {
       }
   }
 
+    public int getScoreContrario () {
+        try {
+            return tablero.getScoreContrario(nombreJugador);
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
   public void setCantJugadores (int cantJugadores) {
       try {
           tablero.setCantJugadores(cantJugadores);
@@ -231,11 +285,6 @@ public class Controlador implements IControladorRemoto {
       } else if (valor == Eventos.TERMINAR_PARTIDA) {
         vista.terminarPartida();
       }
-    } /*else if (valor instanceof IJugador) {
-        this.jugador = (IJugador) valor;
-        vista.iniciarPartida();
-        mostrarTurno();
-        mostrarFichas();
-    }*/
+    }
   }
 }

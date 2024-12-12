@@ -12,4 +12,5 @@ public interface IVista {
     void setMuerto ();
     void terminarPartida ();
     void iniciarPartida ();
+    void iniciarControlador();
 }

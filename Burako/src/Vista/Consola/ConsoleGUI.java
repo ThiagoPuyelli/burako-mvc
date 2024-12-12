@@ -15,6 +15,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.stream.IntStream;
 
 public class ConsoleGUI extends VistaPlay implements IVista  {
     private final JFrame frame = new JFrame();
@@ -22,6 +23,7 @@ public class ConsoleGUI extends VistaPlay implements IVista  {
     private final StyledDocument doc;
     boolean inicioPartida = false;
     boolean terminaPartida = false;
+    ArrayList<IInput> inputs = new ArrayList<>();
 
     public ConsoleGUI (Controlador controlador) {
         super(controlador);
@@ -46,25 +48,24 @@ public class ConsoleGUI extends VistaPlay implements IVista  {
         frame.add(panel, BorderLayout.SOUTH);
         textPane.setFont(new Font("Arial", Font.PLAIN, 18));
 
+        generarInputs();
+
         sendButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String inputText = inputField.getText();
-                System.out.println("TERMINAL");
-                if (inputText.startsWith("iniciar")) {
-                    iniciarControlador();
+                if (!terminaPartida && inicioPartida) {
+                    inputs.get(0).ejecutarComando(inputText);
+                    //if (inputText.startsWith("agarrar")) {
+                    //    agarrarDelMazo(inputText);
+                    //} else if (inputText.startsWith("soltar")) {
+                    //    soltarFicha(inputText);
+                    //} else if (inputText.startsWith("combinacion")) {
+                    //    combinarFichas(inputText);
+                    //} else if (inputText.startsWith("agregar")) {
+                    //    agregarFicha(inputText);
+                    //}
                 }
-                    if (!terminaPartida && inicioPartida) {
-                        if (inputText.startsWith("agarrar")) {
-                            agarrarDelMazo(inputText);
-                        } else if (inputText.startsWith("soltar")) {
-                            soltarFicha(inputText);
-                        } else if (inputText.startsWith("combinacion")) {
-                            combinarFichas(inputText);
-                        } else if (inputText.startsWith("agregar")) {
-                            agregarFicha(inputText);
-                        }
-                    }
                 inputField.setText("");
             }
         });
@@ -77,10 +78,27 @@ public class ConsoleGUI extends VistaPlay implements IVista  {
         inicioPartida = true;
     }
 
+    private void generarInputs () {
+        InputAgarrar inputAgarrar = new InputAgarrar(this, controlador);
+        InputSoltar inputSoltar = new InputSoltar(this, controlador);
+        inputAgarrar.setSiguiente(inputSoltar);
+        InputCombinacion inputCombinacion = new InputCombinacion(this, controlador);
+        inputSoltar.setSiguiente(inputCombinacion);
+        InputAgregar inputAgregar = new InputAgregar(this, controlador);
+        inputCombinacion.setSiguiente(inputAgregar);
+        InputInvalido inputInvalido = new InputInvalido(this, controlador);
+        inputAgregar.setSiguiente(inputInvalido);
+
+        inputs.add(inputAgarrar);
+        inputs.add(inputSoltar);
+        inputs.add(inputCombinacion);
+        inputs.add(inputAgregar);
+        inputs.add(inputInvalido);
+    }
+
     public void iniciarControlador () {
         System.out.println("PEPE");
-        agregarTexto("Momento prueba", Color.BLACK);
-        controlador.conectarJugador();
+        //controlador.conectarJugador();
         controlador.iniciarPartida();
     }
     private void vaciarContenido () {
@@ -103,7 +121,8 @@ public class ConsoleGUI extends VistaPlay implements IVista  {
     public void mostrarTurno (String nombre) {
         System.out.println("DALEEE");
         vaciarContenido();
-        agregarTexto("Jugador " + controlador.getNombre() + "\n", Color.BLACK);
+        //agregarTexto("Jugador " + controlador.getNombre() + "\n", Color.BLACK);
+        mostrarJugadores();
         agregarTexto("Turno de " + nombre, Color.BLACK);
         int estadoTurno = controlador.getEstadoTurno(nombre);
         if (estadoTurno == 2) {
@@ -113,6 +132,24 @@ public class ConsoleGUI extends VistaPlay implements IVista  {
         }
         agregarTexto("\n", Color.BLACK);
         System.out.println("DALEEE 2");
+    }
+
+    private void mostrarJugadores () {
+        ArrayList<IJugadorProxy> jugadoresProxy = controlador.getJugadoresProxy();
+        try {
+            String texto = "Jugador " + jugadoresProxy.get(0).getNombre() + " cantidad de fichas " + jugadoresProxy.get(0).cantFichas();
+            if (jugadoresProxy.size() == 2) {
+                texto += "\nContrincante " + jugadoresProxy.get(1).getNombre() + " cantidad de fichas " + jugadoresProxy.get(1).cantFichas();
+            } else {
+                texto += "\nCompaniero " + jugadoresProxy.get(2).getNombre() + " cantidad de fichas " + jugadoresProxy.get(2).cantFichas();
+                texto += "\nContrincante " + jugadoresProxy.get(1).getNombre() + " cantidad de fichas " + jugadoresProxy.get(1).cantFichas();
+                texto += "\nContrincante " + jugadoresProxy.get(3).getNombre() + " cantidad de fichas " + jugadoresProxy.get(3).cantFichas();
+            }
+            texto += "\n";
+            agregarTexto(texto, Color.BLACK);
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
     }
     public void mostrarFichas () {
         agregarTexto("Fichas: ", Color.BLACK);
@@ -126,6 +163,7 @@ public class ConsoleGUI extends VistaPlay implements IVista  {
         }
         i = 1;
         agregarTexto("\nScore: " + controlador.getScore(), Color.BLACK);
+        agregarTexto("\nScore enemigo: " + controlador.getScoreContrario(), Color.BLACK);
         agregarTexto("\nPozo: ", Color.BLACK);
         for (IFicha f : controlador.getPozo()) {
             mostrarFicha(f);
@@ -158,7 +196,19 @@ public class ConsoleGUI extends VistaPlay implements IVista  {
         }
     }
 
-    private void agregarTexto(String texto, Color color) {
+    private ColorFicha generarColorFicha (char color) {
+        if (color == 'R') {
+            return ColorFicha.rojo;
+        } else if (color == 'N') {
+            return ColorFicha.verde;
+        } else if (color == 'G') {
+            return ColorFicha.amarillo;
+        } else {
+            return ColorFicha.azul;
+        }
+    }
+
+    public void agregarTexto(String texto, Color color) {
         SimpleAttributeSet attributes = new SimpleAttributeSet();
         StyleConstants.setForeground(attributes, color);
         try {
@@ -168,77 +218,34 @@ public class ConsoleGUI extends VistaPlay implements IVista  {
         }
     }
 
-    private void agarrarDelMazo (String inputText) {
-        if (controlador.getEstadoTurno() == 2) {
-            String sub = "agarrar ";
-            String input = inputText.substring(sub.length());
-            if (input.startsWith("pozo")) {
-                if (controlador.getPozo().isEmpty()) {
-                    agregarTexto("El pozo esta vacio\n", Color.BLACK);
-                } else {
-                    controlador.agarrarPozo();
+    public int posicionInputFicha (String input, ArrayList<Integer> posiciones) {
+        if (input.length() == 2 || input.length() == 3) {
+            int numero;
+            char color;
+            if (input.length() == 2) {
+                numero = Character.getNumericValue(input.charAt(0));
+                color = input.charAt(1);
+            } else {
+                color = input.charAt(2);
+                numero = Integer.parseInt(input.substring(0, 2));
+            }
+            ArrayList<IFicha> fichas = controlador.getFichas();
+
+            if (("RNGV").indexOf(color) != -1) {
+                ColorFicha colorFicha = generarColorFicha(color);
+                System.out.println(colorFicha + " " + numero + " ");
+                String s = "";
+                for (IFicha f : fichas) {
+                    System.out.print(f.getNumero() + " " + f.getColor() + "\n");
                 }
-            } else if (input.startsWith("mazo")) {
-                controlador.agarrarMazo();
-                mostrarTurno(controlador.getNombre());
-                mostrarFichas();
-            } else {
-                agregarTexto("\nComando equivocado", Color.BLACK);
+                System.out.print("\n");
+                int posicion = IntStream.range(0, fichas.size())
+                        .filter(i -> fichas.get(i).getColor() == colorFicha && fichas.get(i).getNumero() == numero && (posiciones == null || !posiciones.contains(i))) // Cambia la condición según tus necesidades
+                        .findFirst()
+                        .orElse(-1);
+                return posicion;
             }
-        } else {
-            agregarTexto("\nNo podes agarrar una ficha en este momento", Color.BLACK);
         }
-    }
-
-    private void soltarFicha (String inputText) {
-        if (controlador.getEstadoTurno() == 1) {
-            String sub = "soltar ";
-            String input = inputText.substring(sub.length());
-            int f = Integer.parseInt(input) - 1;
-            if (f >= controlador.getFichas().size()) {
-                agregarTexto("\nFicha invalida", Color.BLACK);
-            } else {
-                controlador.soltarFicha(f);
-            }
-        } else {
-            agregarTexto("\nNo podes soltar una ficha en este momento", Color.BLACK);
-        }
-    }
-
-    private void combinarFichas (String inputText) {
-        if (controlador.getEstadoTurno() == 1) {
-            String sub = "combinacion ";
-            String input = inputText.substring(sub.length());
-            String[] inputSplit = input.split(" ");
-            ArrayList<Integer> posiciones = new ArrayList<>();
-            boolean verify = false;
-            for (String s : inputSplit) {
-                verify = Integer.parseInt(s) - 1 >= controlador.getFichas().size();
-                posiciones.add(Integer.parseInt(s) - 1);
-            }
-            if (verify) {
-                agregarTexto("\nUna posicion es invalida", Color.BLACK);
-            } else {
-                controlador.combinacion(posiciones);
-            }
-        } else {
-            agregarTexto("\nNo podes hacer una combinacion en este momento", Color.BLACK);
-        }
-    }
-
-    private void agregarFicha (String inputText) {
-        if (controlador.getEstadoTurno() == 1) {
-            String sub = "agregar ";
-            String input = inputText.substring(sub.length());
-            String[] inputSplit = input.split(" ");
-            int c = Integer.parseInt(inputSplit[0]);
-            int f = Integer.parseInt(inputSplit[1]);
-            if (c >= controlador.getCombinaciones().size() || f >= controlador.getFichas().size()) {
-                agregarTexto("\nUna de las posiciones es invalida", Color.BLACK);
-            }
-            controlador.agregarFichaComb(c - 1, f - 1);
-        } else {
-            agregarTexto("\nNo podes hacer un agregar en este momento", Color.BLACK);
-        }
+        return -1;
     }
 }

@@ -11,10 +11,8 @@ public class GeneradorPartida {
             for (int i = 1;i <= 13;i++) {
                 fichas.add(new Ficha(c, i));
                 fichas.add(new Ficha(c, i));
-                Ficha.ID++;
             }
         }
-        Ficha.ID++;
         fichas.add(new Ficha(ColorFicha.rojo, 50));
         fichas.add(new Ficha(ColorFicha.azul, 50));
         Collections.shuffle(fichas);

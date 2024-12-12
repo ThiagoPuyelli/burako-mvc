@@ -5,7 +5,7 @@ import ar.edu.unlu.rmimvc.observer.IObservableRemoto;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 
-public interface IJugador {
+public interface IJugador extends IJugadorProxy {
   String getNombre() throws RemoteException;
   void setFichas (ArrayList<IFicha> fichas) throws RemoteException;
   int getEstadoTurno () throws RemoteException;
@@ -13,4 +13,5 @@ public interface IJugador {
   ArrayList<IFicha> getFichas () throws RemoteException;
   IFicha soltarFicha (int f) throws RemoteException;
   ICombinacion combinacion (ArrayList<Integer> posiciones) throws RemoteException;
+  int cantFichas () throws RemoteException;
 }

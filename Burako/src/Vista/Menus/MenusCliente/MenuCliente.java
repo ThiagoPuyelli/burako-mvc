@@ -3,6 +3,7 @@ package Vista.Menus.MenusCliente;
 import Controlador.Controlador;
 import Services.RankingScheme;
 import Services.RankingSerializador;
+import Vista.Grafica.Grafica;
 
 import javax.swing.*;
 import java.awt.*;
@@ -47,12 +48,21 @@ public class MenuCliente extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 setVisible(false);
-                //Tablero tablero = new Tablero(1);
-                //VistaNombre nombre1 = new VistaNombre(tablero);
-                //VistaNombre nombre2 = new VistaNombre(tablero);
-                //nombre1.setVisible(true);
-                //nombre2.setVisible(true);
-                //setVisible(false);
+
+                if (!controlador.getPartidaCreada()) {
+                    ElegirJugadores elegirJugadores = new ElegirJugadores(controlador);
+                    elegirJugadores.setVisible(true);
+                    //Grafica vista = new Grafica(controlador);
+                    //controlador.setVista(vista);
+                    //vista.iniciar();
+                } else {
+                    if (!controlador.existeJugador()) {
+                        ElegirEquipo elegirEquipo = new ElegirEquipo(controlador);
+                        elegirEquipo.setVisible(true);
+                    } else {
+                        new UsuarioRepetido(controlador);
+                    }
+                }
             }
         });
 
@@ -65,13 +75,6 @@ public class MenuCliente extends JFrame {
                     s += r.getNombre() + " " + r.getPartidasGanadas() + "\n";
                 }
                 ranking.setText(s);
-                //ranking.setText(controlador.obtenerRanking().toString());
-                //Tablero tablero = new Tablero(2);
-                //VistaNombreDuo nombre1 = new VistaNombreDuo(tablero);
-                //VistaNombreDuo nombre2 = new VistaNombreDuo(tablero);
-                //nombre1.setVisible(true);
-                //nombre2.setVisible(true);
-                //setVisible(false);
             }
         });
     }

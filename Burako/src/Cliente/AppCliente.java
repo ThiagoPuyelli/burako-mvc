@@ -72,11 +72,15 @@ public class AppCliente {
         System.out.println("127.0.0.1" + " " + Integer.parseInt(port) + " " + "127.0.0.1" + " " + 8888);
         Cliente cliente = new Cliente("127.0.0.1", Integer.parseInt(port), "127.0.0.1", 8888);
         //vista.iniciar(); // muestra la vista gráfica
-        MenuCliente menuCliente = new MenuCliente(controlador);
-        menuCliente.iniciar();
+
         try {
             controlador.setJugador(nombreJugador);
-            cliente.iniciar(controlador); // enlaza el controlador con el modelo remoto
+            cliente.iniciar(controlador);
+            MenuCliente menuCliente = new MenuCliente(controlador);
+            menuCliente.iniciar();
+
+            //controlador.setEquipo(Integer.parseInt(equipo));
+             // enlaza el controlador con el modelo remoto
         } catch (RemoteException e) {
             // error de conexión
             e.printStackTrace();
