@@ -98,9 +98,11 @@ public class Equipo implements Serializable {
             setEstadoTurno(0);
         }
     }
+
     public ArrayList<ICombinacion> getCombinaciones () {
         return combinaciones;
     }
+    
     static int sumarScore (IFicha f) {
         if (f.getNumero() == 1) {
             return 15;
@@ -115,19 +117,11 @@ public class Equipo implements Serializable {
         }
     }
 
-    //public void generarFichas () throws RemoteException {
-    //    for (IJugador j : jugadores) {
-    //        j.setFichas(mazo.obtenerFichas(11));
-    //    }
-    //}
 
     private IJugador jugadorEnTurno () {
         return jugadores.get(turnoJugador);
     }
 
-    //protected void setFichas (ArrayList<IFicha> fichas) throws RemoteException {
-    //    jugador1.setFichas(fichas);
-    //}
 
     public boolean verificarJugador (String nombre) throws RemoteException {
         for (IJugador ju : jugadores) {
@@ -136,7 +130,6 @@ public class Equipo implements Serializable {
             }
         }
         return false;
-        //return jugador1.getNombre().equals(nombre);
     }
 
     public String turnoJugador () throws RemoteException {
@@ -200,12 +193,6 @@ public class Equipo implements Serializable {
             }
         }
         return null;
-        //IJugador jugador = jugadorEnTurno();
-        //if (jugador.getNombre().equals(nombre)) {
-        //    return jugador;
-        //} else {
-        //  return null;
-        //}
     }
 
     public IFicha soltarFicha(int f) throws RemoteException {
