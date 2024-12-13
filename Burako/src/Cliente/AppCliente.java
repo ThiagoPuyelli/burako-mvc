@@ -55,7 +55,7 @@ public class AppCliente {
                 JOptionPane.QUESTION_MESSAGE,
                 null,
                 null,
-                "pito"
+                "nombre"
         );
         //String equipo = (String) JOptionPane.showInputDialog(
         //        null,

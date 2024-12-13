@@ -18,7 +18,7 @@ public class UsuarioRepetido extends JFrame {
                 JOptionPane.QUESTION_MESSAGE,
                 null,
                 null,
-                "pito"
+                "nombre"
         );
         if (nombreJugador == null) {
             setVisible(false);
