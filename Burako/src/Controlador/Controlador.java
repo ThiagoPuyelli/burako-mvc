@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 import Services.RankingScheme;
+import Services.TableroScheme;
 import Vista.IVista;
 import ar.edu.unlu.rmimvc.cliente.IControladorRemoto;
 import ar.edu.unlu.rmimvc.observer.IObservableRemoto;
@@ -65,6 +66,14 @@ public class Controlador implements IControladorRemoto {
       }
   }
 
+  public boolean getPartidaIniciada () {
+      try {
+          return tablero.partidaIniciada();
+      } catch (RemoteException e) {
+          throw new RuntimeException(e);
+      }
+  }
+
   public void conectarJugador () {
       try {
           tablero.agregarJugador(nombreJugador, equipo);
@@ -75,10 +84,39 @@ public class Controlador implements IControladorRemoto {
 
     public void desconectarJugador() {
         try {
+            System.out.println("EJECUTADO");
             tablero.cerrar(this, nombreJugador, equipo);
-            // reinicio el modelo si no hay mas jugadores.
-            if (tablero.getJugadores().isEmpty())
-                tablero.reniciarJuego();
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void limpiarPartidas () {
+
+    }
+
+    public ArrayList<TableroScheme> obtenerPartidas () {
+        try {
+            return tablero.obtenerPartidas();
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public boolean posibleRecuperar () {
+        try {
+            for (IJugadorProxy j : this.tablero.getJugadoresARecuperar()) {
+                if (j.getNombre().equals(nombreJugador)) return true;
+            }
+            return false;
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void elegirPartida (int posTablero) {
+        try {
+            tablero.elegirPartida(posTablero);
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
@@ -263,6 +301,16 @@ public class Controlador implements IControladorRemoto {
       }
   }
 
+  public void reconectarJugador () {
+      try {
+          tablero.reconectarJugador(nombreJugador);
+          equipo = tablero.getEquipo(nombreJugador);
+      } catch (RemoteException e) {
+          e.printStackTrace();
+          throw new RuntimeException(e);
+      }
+  }
+
   @Override
   public <T extends IObservableRemoto> void setModeloRemoto(T t) throws RemoteException {
     tablero = (ITablero)t;
@@ -270,10 +318,8 @@ public class Controlador implements IControladorRemoto {
 
   @Override
   public void actualizar(IObservableRemoto iObservableRemoto, Object valor) throws RemoteException {
-      System.out.println("HOLIWIIIISS " + valor);
     if (valor instanceof Eventos) {
       if (valor == Eventos.INICIAR_PARTIDA) {
-        System.out.println("HOLA" + vista);
         vista.iniciarPartida();
         mostrarTurno();
         mostrarFichas();
@@ -284,6 +330,8 @@ public class Controlador implements IControladorRemoto {
         vista.setMuerto();
       } else if (valor == Eventos.TERMINAR_PARTIDA) {
         vista.terminarPartida();
+      } else if (valor == Eventos.DESCONECTADO) {
+        vista.setDesconexion();
       }
     }
   }

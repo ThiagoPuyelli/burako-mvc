@@ -1,9 +1,13 @@
 package modelo;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 
 public class Pierna extends Combinacion implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 2876642017763209637L;
 
     public Pierna (ArrayList<IFicha> fichas) {
         super(fichas);

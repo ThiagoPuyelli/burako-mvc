@@ -12,12 +12,9 @@ public class ElegirEquipo extends JFrame {
     private JButton boton1;
     private JButton boton2;
     private JButton boton3;
-    private JTextArea ranking;
-    private Controlador controlador;
 
     public ElegirEquipo(Controlador controlador) {
         // Configuración de la ventana
-        this.controlador = controlador;
         setSize(300, 150);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -50,7 +47,7 @@ public class ElegirEquipo extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 setVisible(false);
                 controlador.setEquipo(1);
-                controlador.conectarJugador();
+                //controlador.conectarJugador();
                 ElegirVista elegirVista = new ElegirVista(controlador);
                 elegirVista.setVisible(true);
             }
@@ -62,7 +59,7 @@ public class ElegirEquipo extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 setVisible(false);
                 controlador.setEquipo(2);
-                controlador.conectarJugador();
+                //controlador.conectarJugador();
                 ElegirVista elegirVista = new ElegirVista(controlador);
                 elegirVista.setVisible(true);
             }

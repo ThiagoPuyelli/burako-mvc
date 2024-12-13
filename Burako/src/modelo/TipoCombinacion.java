@@ -1,5 +1,5 @@
 package modelo;
 
-enum TipoCombinacion {
+enum TipoCombinacion  {
   Pierna, Escalera
 }

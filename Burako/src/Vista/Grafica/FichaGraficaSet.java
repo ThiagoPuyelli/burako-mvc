@@ -17,14 +17,16 @@ public class FichaGraficaSet extends FichaGrafica {
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (!marked) {
-                    setBackground(Color.ORANGE);
-                    grafica.agregarPosicion(pos);
-                } else {
-                    setBackground(Color.WHITE);
-                    grafica.eliminarPosicion(pos);
+                if (grafica.getEstadoTurno() == 1) {
+                    if (!marked) {
+                        setBackground(Color.ORANGE);
+                        grafica.agregarPosicion(pos);
+                    } else {
+                        setBackground(Color.WHITE);
+                        grafica.eliminarPosicion(pos);
+                    }
+                    marked = !marked;
                 }
-                marked = !marked;
             }
         });
     }

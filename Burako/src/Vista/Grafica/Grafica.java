@@ -27,6 +27,7 @@ public class Grafica extends VistaPlay implements IVista, MouseListener {
     };
 
     private PozoGrafica pozoGrafica = new PozoGrafica(0, this);
+    private JPanel panelPrincipal = new JPanel();
     private boolean inicioPartida = false;
     private boolean terminaPartida = false;
     private SetFichasGrafica setFichas = new SetFichasGrafica();
@@ -41,19 +42,27 @@ public class Grafica extends VistaPlay implements IVista, MouseListener {
     private JButton hacerCombinacion = new JButton();
     private JButton soltar = new JButton();
     private GraficaJugadores graficaJugadores;
-
+    private PanelMensaje panelDesconexion = new PanelMensaje("Un jugador se desconecto, cuando vuelvan todos se sigue jugando");
+    private PanelMensaje panelAIniciar = new PanelMensaje("La partida comenzara cuando todos se unan");
+    private PanelMensaje panelTerminar = new PanelMensaje("Partida finalizada");
+    private final CardLayout cardLayout = new CardLayout();
 
     public Grafica(Controlador controlador) {
         super(controlador);
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(650, 650);
+        frame.setSize(850, 650);
+        panelPrincipal.setLayout(cardLayout);
+        Dimension dimension = new Dimension(frame.getWidth(), frame.getHeight());
+        panelPrincipal.setPreferredSize(dimension);
+        panelPrincipal.setMinimumSize(dimension);
+        panelPrincipal.setMaximumSize(dimension);
+        frame.add(panelPrincipal);
         panel.setLayout(new BorderLayout());
 
         hacerCombinacion.setText("Hacer combinacion");
         hacerCombinacion.setVisible(false);
         soltar.setText("Soltar ficha");
-        soltar.setVisible(false);
         JPanel botones = new JPanel();
         botones.add(hacerCombinacion);
         botones.add(soltar);
@@ -69,28 +78,39 @@ public class Grafica extends VistaPlay implements IVista, MouseListener {
 
         hacerCombinacion.addActionListener(new ActionListener() {
             public void actionPerformed (ActionEvent e) {
-                crearCombinacion();
-                resetPosiciones();
+                if (controlador.getEstadoTurno() == 1) {
+                    crearCombinacion();
+                    resetPosiciones();
+                }
             }
         });
 
         soltar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                soltarFichaPozo();
-                resetPosiciones();
+                if (controlador.getEstadoTurno() == 1) {
+                    soltarFichaPozo();
+                    resetPosiciones();
+                }
             }
         });
-        frame.add(graficaJugadores);
 
         frame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                //controlador.desconectarJugador();
-                System.exit(0);
+                controlador.desconectarJugador();
+                SwingUtilities.invokeLater(()-> System.exit(0));
             }
         });
 
-        // desconecta al jugador cuando cierra la ventana.
+        soltar.setVisible(false);
+        panel.setVisible(true);
+        panelDesconexion.setVisible(false);
+        panelTerminar.setVisible(false);
+        panelAIniciar.setVisible(true);
+        panelPrincipal.add(panelAIniciar, "panelAIniciar");
+        panelPrincipal.add(graficaJugadores, "graficaJugadores");
+        panelPrincipal.add(panelDesconexion, "panelDesconexion");
+        panelPrincipal.add(panelTerminar, "panelTerminar");
 
     }
 
@@ -101,6 +121,9 @@ public class Grafica extends VistaPlay implements IVista, MouseListener {
 
     @Override
     public void mostrarTurno(String nombre) {
+        panelAIniciar.setVisible(false);
+        panelDesconexion.setVisible(false);
+        cardLayout.show(panelPrincipal, "graficaJugadores");
         graficaJugadores.mostrarTurnos(nombre);
     }
 
@@ -111,6 +134,14 @@ public class Grafica extends VistaPlay implements IVista, MouseListener {
     public void iniciarControlador () {
         //controlador.conectarJugador();
         controlador.iniciarPartida();
+    }
+
+    @Override
+    public void setDesconexion() {
+        if (!terminaPartida) {
+            graficaJugadores.setVisible(false);
+            cardLayout.show(panelPrincipal, "panelDesconexion");
+        }
     }
 
     private void crearCombinacion () {
@@ -248,7 +279,9 @@ public class Grafica extends VistaPlay implements IVista, MouseListener {
 
     @Override
     public void terminarPartida() {
-
+        panel.setVisible(false);
+        terminaPartida = true;
+        cardLayout.show(panelPrincipal, "panelTerminar");
     }
 
     @Override

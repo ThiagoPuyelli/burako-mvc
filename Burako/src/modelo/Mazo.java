@@ -1,8 +1,12 @@
 package modelo;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Mazo {
+public class Mazo implements Serializable {
+    @Serial
+    private static final long serialVersionUID = -7872907716008503380L;
     private ArrayList<IFicha> mazo;
 
     public Mazo (ArrayList<IFicha> mazo) {
@@ -10,13 +14,11 @@ public class Mazo {
     }
 
     public IFicha obtenerFicha () {
-        System.out.println("Momento mique");
         return this.mazo.remove(0);
     }
 
     public ArrayList<IFicha> obtenerFichas (int cantidad) {
         ArrayList<IFicha> fichas = new ArrayList<>();
-        System.out.println("Se sarpan " + cantidad);
         for (int i = 0;i < cantidad;i++) {
             fichas.add(this.obtenerFicha());
         }

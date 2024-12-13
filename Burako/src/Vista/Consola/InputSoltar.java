@@ -16,12 +16,9 @@ public class InputSoltar extends IInput {
                 if (controlador.getEstadoTurno() == 1) {
                     String sub = "soltar ";
                     String input = inputText.substring(sub.length());
-                    int f = Integer.parseInt(input) - 1;
-                    if (f >= controlador.getFichas().size()) {
-                        console.agregarTexto("\nFicha invalida", Color.BLACK);
-                    } else {
-                        controlador.soltarFicha(f);
-                    }
+                    String f = input;
+                    int posicion = console.posicionInputFicha(f, null);
+                    controlador.soltarFicha(posicion);
                 } else {
                     console.agregarTexto("\nNo podes soltar una ficha en este momento", Color.BLACK);
                 }

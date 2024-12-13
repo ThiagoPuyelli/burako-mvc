@@ -1,8 +1,11 @@
 package modelo;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 public class Ficha implements IFicha, Serializable {
+  @Serial
+  private static final long serialVersionUID = 8012057219940348254L;
   private int numero;
   private ColorFicha color;
 

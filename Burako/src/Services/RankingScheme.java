@@ -1,8 +1,11 @@
 package Services;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 public class RankingScheme implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 6090583149963079130L;
     String nombre;
     int partidasGanadas;
 

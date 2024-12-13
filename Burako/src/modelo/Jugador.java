@@ -2,12 +2,15 @@ package modelo;
 
 import ar.edu.unlu.rmimvc.observer.IObservableRemoto;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
 public class Jugador implements IJugador, Serializable, IJugadorProxy {
+  @Serial
+  private static final long serialVersionUID = 582287822910246580L;
   private String nombre;
   private ArrayList<IFicha> fichas;
   private int estadoTurno = 0;

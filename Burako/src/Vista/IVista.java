@@ -13,4 +13,5 @@ public interface IVista {
     void terminarPartida ();
     void iniciarPartida ();
     void iniciarControlador();
+    void setDesconexion();
 }

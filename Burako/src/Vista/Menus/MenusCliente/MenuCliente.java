@@ -50,17 +50,29 @@ public class MenuCliente extends JFrame {
                 setVisible(false);
 
                 if (!controlador.getPartidaCreada()) {
-                    ElegirJugadores elegirJugadores = new ElegirJugadores(controlador);
-                    elegirJugadores.setVisible(true);
-                    //Grafica vista = new Grafica(controlador);
-                    //controlador.setVista(vista);
-                    //vista.iniciar();
-                } else {
-                    if (!controlador.existeJugador()) {
-                        ElegirEquipo elegirEquipo = new ElegirEquipo(controlador);
-                        elegirEquipo.setVisible(true);
+                    if (controlador.obtenerPartidas().size() > 0) {
+                        ElegirPartida elegirPartida = new ElegirPartida(controlador);
+                        elegirPartida.setVisible(true);
                     } else {
-                        new UsuarioRepetido(controlador);
+                        ElegirJugadores elegirJugadores = new ElegirJugadores(controlador);
+                        elegirJugadores.setVisible(true);
+                    }
+                } else {
+                    if (!controlador.getPartidaIniciada()) {
+                        if (!controlador.existeJugador()) {
+                            ElegirEquipo elegirEquipo = new ElegirEquipo(controlador);
+                            elegirEquipo.setVisible(true);
+                        } else {
+                            new UsuarioRepetido(controlador);
+                        }
+                    } else {
+                        if (controlador.posibleRecuperar()) {
+                            ElegirVista elegirVista = new ElegirVista(controlador);
+                            elegirVista.setVisible(true);
+                        } else {
+                            Error error = new Error("Su jugador no se encuentra en la partida");
+                            error.setVisible(true);
+                        }
                     }
                 }
             }

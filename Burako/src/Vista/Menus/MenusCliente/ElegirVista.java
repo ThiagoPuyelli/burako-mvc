@@ -45,10 +45,16 @@ public class ElegirVista extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 setVisible(false);
-                Grafica vista = new Grafica(controlador);
-                controlador.setVista(vista);
-                vista.iniciar();
-                vista.iniciarControlador();
+                SwingUtilities.invokeLater(() -> {
+                    Grafica vista = new Grafica(controlador);
+                    controlador.setVista(vista);
+                    controlador.conectarJugador();
+                    controlador.reconectarJugador();
+                    controlador.limpiarPartidas();
+                    vista.iniciar();
+                    vista.iniciarControlador();
+                });
+
             }
         });
 
@@ -58,6 +64,9 @@ public class ElegirVista extends JFrame {
                 setVisible(false);
                 ConsoleGUI vista = new ConsoleGUI(controlador);
                 controlador.setVista(vista);
+                controlador.conectarJugador();
+                controlador.reconectarJugador();
+                controlador.limpiarPartidas();
                 vista.iniciar();
                 vista.iniciarControlador();
             }

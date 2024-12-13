@@ -47,6 +47,7 @@ public class ConsoleGUI extends VistaPlay implements IVista  {
         frame.add(scrollPane, BorderLayout.CENTER);
         frame.add(panel, BorderLayout.SOUTH);
         textPane.setFont(new Font("Arial", Font.PLAIN, 18));
+        setPendiente();
 
         generarInputs();
 
@@ -70,8 +71,20 @@ public class ConsoleGUI extends VistaPlay implements IVista  {
             }
         });
     }
+
     public void iniciar () {
         frame.setVisible(true);
+    }
+
+    private void setPendiente () {
+        textPane.setText("La partida comenzara cuando todos se unan");
+    }
+
+    public void setDesconexion () {
+        if (!terminaPartida) {
+            textPane.setText("Un jugador se desconecto, cuando vuelvan todos se sigue jugando");
+            inicioPartida = false;
+        }
     }
 
     public void iniciarPartida () {
@@ -97,7 +110,6 @@ public class ConsoleGUI extends VistaPlay implements IVista  {
     }
 
     public void iniciarControlador () {
-        System.out.println("PEPE");
         //controlador.conectarJugador();
         controlador.iniciarPartida();
     }
@@ -115,7 +127,7 @@ public class ConsoleGUI extends VistaPlay implements IVista  {
 
     public void terminarPartida () {
         terminaPartida = true;
-        agregarTexto("Partida finalizada ganador: " + controlador.getGanador(), Color.BLACK);
+        textPane.setText("Partida finalizada ganador: " + controlador.getGanador());
     }
 
     public void mostrarTurno (String nombre) {

@@ -1,9 +1,13 @@
 package modelo;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 
 public class Escalera extends Combinacion implements Serializable {
+    @Serial
+    private static final long serialVersionUID = -1267587181846267711L;
+
     public Escalera (ArrayList<IFicha> fichas) {
         super(fichas);
     }
