@@ -13,13 +13,6 @@ public class SetFichasGrafica extends JPanel {
         this.setLayout(new FlowLayout());
     }
 
-    //public void agregarFicha(FichaGrafica ficha) {
-    //    fichas.add(ficha);
-    //    this.add(ficha);
-    //    this.revalidate(); // Actualizar el diseño
-    //    this.repaint();
-    //}
-
     public int getPos () {
         return pos;
     }
@@ -44,7 +37,6 @@ public class SetFichasGrafica extends JPanel {
         this.fichas = fichas;
         this.removeAll();
 
-        // Añadir los nuevos componentes al JPanel
         for (FichaGrafica ficha : fichas) {
             this.add(ficha);
         }

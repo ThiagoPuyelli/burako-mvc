@@ -16,32 +16,32 @@ public class MenuCliente extends JFrame {
     private JButton boton1;
     private JButton boton2;
     private JTextArea ranking;
-    private Controlador controlador;
 
     public MenuCliente(Controlador controlador) {
         // Configuración de la ventana
-        this.controlador = controlador;
         setTitle("Ejemplo Swing");
-        setSize(300, 150);
+        setSize(400, 500);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
         // Crear componentes
-        label = new JLabel("           Bienvenido a el Burako!");
+        label = new JLabel("Bienvenido a el Burako!");
+        label.setHorizontalAlignment(SwingConstants.CENTER);
         boton1 = new JButton("Unirse a partida");
         boton2 = new JButton("Ranking");
 
         // Configurar diseño
         setLayout(new BorderLayout());
-        add(label, BorderLayout.CENTER);
+        add(label, BorderLayout.NORTH);
 
         JPanel panelBotones = new JPanel();
         panelBotones.add(boton1);
         panelBotones.add(boton2);
         ranking = new JTextArea();
         ranking.setEditable(false);
-        add(panelBotones, BorderLayout.SOUTH);
-        add(ranking, BorderLayout.EAST);
+        ranking.setFont(new Font(Font.MONOSPACED, Font.BOLD, 16));
+        add(panelBotones, BorderLayout.CENTER);
+        add(ranking, BorderLayout.SOUTH);
 
         // Configurar acciones de los botones
         boton1.addActionListener(new ActionListener() {

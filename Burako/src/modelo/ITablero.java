@@ -71,4 +71,6 @@ public interface ITablero extends IObservableRemoto {
     ArrayList<TableroScheme> obtenerPartidas () throws RemoteException;
 
     int getEquipo (String nombreJugador) throws RemoteException;
+
+    void limpiarPartida () throws RemoteException;
 }

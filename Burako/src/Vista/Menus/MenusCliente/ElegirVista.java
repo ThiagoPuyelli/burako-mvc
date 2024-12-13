@@ -17,18 +17,15 @@ public class ElegirVista extends JFrame {
     private Controlador controlador;
 
     public ElegirVista (Controlador controlador) {
-        // Configuración de la ventana
         this.controlador = controlador;
         setSize(300, 150);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        // Crear componentes
         label = new JLabel("           Elige el tipo de partida");
         boton1 = new JButton("Grafica");
         boton2 = new JButton("Consola");
 
-        // Configurar diseño
         setLayout(new BorderLayout());
         add(label, BorderLayout.CENTER);
 
@@ -40,7 +37,6 @@ public class ElegirVista extends JFrame {
         add(panelBotones, BorderLayout.SOUTH);
         add(ranking, BorderLayout.EAST);
 
-        // Configurar acciones de los botones
         boton1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -50,7 +46,6 @@ public class ElegirVista extends JFrame {
                     controlador.setVista(vista);
                     controlador.conectarJugador();
                     controlador.reconectarJugador();
-                    controlador.limpiarPartidas();
                     vista.iniciar();
                     vista.iniciarControlador();
                 });
@@ -66,7 +61,6 @@ public class ElegirVista extends JFrame {
                 controlador.setVista(vista);
                 controlador.conectarJugador();
                 controlador.reconectarJugador();
-                controlador.limpiarPartidas();
                 vista.iniciar();
                 vista.iniciarControlador();
             }

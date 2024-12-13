@@ -2,6 +2,8 @@ package Services;
 
 import modelo.Tablero;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class PartidaSerializador {
@@ -14,10 +16,21 @@ public class PartidaSerializador {
         guardarPartidas(tableros);
     }
 
-    public static void eliminarPartida (int i) {
-        ArrayList<TableroScheme> tableros = obtenerTableros();
-        tableros.remove(i);
-        guardarPartidas(tableros);
+    public static void eliminarPartida () {
+        File archivo = new File("partida.dat");
+
+        if (archivo.delete()) {
+            System.out.println("Archivo eliminado.");
+            try {
+                if (archivo.createNewFile()) {
+                    System.out.println("Archivo creado nuevamente.");
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            System.out.println("No se pudo eliminar el archivo.");
+        }
     }
 
     public static void guardarPartidas (ArrayList<TableroScheme> tableros) {

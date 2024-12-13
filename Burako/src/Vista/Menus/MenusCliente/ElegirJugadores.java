@@ -14,22 +14,16 @@ public class ElegirJugadores extends JFrame {
     private JLabel label;
     private JButton boton1;
     private JButton boton2;
-    private JTextArea ranking;
-    private Controlador controlador;
 
     public ElegirJugadores(Controlador controlador) {
-        // Configuración de la ventana
-        this.controlador = controlador;
         setSize(300, 150);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        // Crear componentes
         label = new JLabel("           Elige el tipo de partida");
         boton1 = new JButton("Solo");
         boton2 = new JButton("Duo");
 
-        // Configurar diseño
         setLayout(new BorderLayout());
         add(label, BorderLayout.CENTER);
 
@@ -38,7 +32,6 @@ public class ElegirJugadores extends JFrame {
         panelBotones.add(boton2);
         add(panelBotones, BorderLayout.SOUTH);
 
-        // Configurar acciones de los botones
         boton1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

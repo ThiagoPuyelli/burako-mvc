@@ -6,10 +6,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class MazoGrafica extends FichaGrafica {
-    private int numero;
-    private Grafica grafica;
 
-    // Constructor
     public MazoGrafica(int numero, Grafica grafica) {
         super(numero, Color.BLACK);
         if (numero == 50) {

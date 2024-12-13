@@ -84,15 +84,18 @@ public class Controlador implements IControladorRemoto {
 
     public void desconectarJugador() {
         try {
-            System.out.println("EJECUTADO");
             tablero.cerrar(this, nombreJugador, equipo);
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public void limpiarPartidas () {
-
+    public void limpiarPartida () {
+        try {
+            tablero.limpiarPartida();
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public ArrayList<TableroScheme> obtenerPartidas () {
@@ -153,7 +156,6 @@ public class Controlador implements IControladorRemoto {
   }
   public void mostrarTurno () {
       try {
-          System.out.println("FRANCO HACE EL COITO");
           vista.mostrarTurno(tablero.getTurno());
       } catch (RemoteException e) {
           throw new RuntimeException(e);
@@ -182,7 +184,6 @@ public class Controlador implements IControladorRemoto {
 
   public ArrayList<ICombinacion> getCombinaciones () {
       try {
-          System.out.println(nombreJugador + " Que gordo este mique");
           return tablero.getCombinaciones(nombreJugador);
       } catch (RemoteException e) {
           throw new RuntimeException(e);
@@ -191,7 +192,6 @@ public class Controlador implements IControladorRemoto {
 
   public ArrayList<ICombinacion> getCombinacionesContrario () {
       try {
-          System.out.println(nombreJugador + " Que contrario este mique");
           return tablero.getCombinacionesContrario(nombreJugador);
       } catch (RemoteException e) {
           throw new RuntimeException(e);

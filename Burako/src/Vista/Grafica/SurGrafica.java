@@ -17,15 +17,12 @@ public class SurGrafica extends JPanel {
         this.setOpaque(false);
         this.setScore(score);
         this.setScoreEnemigo(scoreEnemigo);
-        //this.score.setText("Tu score: " + score);
-        //this.scoreEnemigo.setText("Score enemigo: " + scoreEnemigo);
         this.fichas = fichas;
     }
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        // Dibujar la imagen de fondo
         g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
     }
 

@@ -45,15 +45,12 @@ public class RankingSerializador {
     public static ArrayList<RankingScheme> obtenerPrimeros10 () {
         ArrayList<RankingScheme> ranking = obtenerRanking();
         ranking.sort(Comparator.comparingInt(RankingScheme::getPartidasGanadas).reversed());
-        System.out.println("HUla");
         ArrayList<RankingScheme> primeros10 = new ArrayList<>();
         int i = 0;
-        System.out.println("HUla");
         while (i < ranking.size() && i < 10) {
             primeros10.add(ranking.get(i));
             i++;
         }
-        System.out.println("HUla");
         return primeros10;
     }
 }

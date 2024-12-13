@@ -53,7 +53,6 @@ public class GraficaJugadores extends JPanel {
         try {
             String textoEnPantalla1 = j.getNombre();
             String textoEnPantalla2 = "";
-            System.out.println(j.getNombre() + " " + nombreEnTurno);
             if (j.getNombre().equals(nombreEnTurno)) {
                 textoEnPantalla2 += this.estado(controlador.getEstadoTurno(nombreEnTurno));
             }

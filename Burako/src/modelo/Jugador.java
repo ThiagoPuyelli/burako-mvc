@@ -44,11 +44,6 @@ public class Jugador implements IJugador, Serializable, IJugadorProxy {
     for (Integer p : posiciones) {
       fichasComb.add(fichas.get(p));
     }
-    System.out.print("DALE GEY: ");
-    for (IFicha f : fichasComb) {
-      System.out.print(f.getNumero() + " ");
-    }
-    System.out.print("\n");
     ICombinacion comb = FabricaCombinacion.crearCombinacion(fichasComb);
 
     if (comb == null) {
@@ -61,15 +56,5 @@ public class Jugador implements IJugador, Serializable, IJugadorProxy {
               .ifPresent(fichas::remove);
     }
     return comb;
-    //for (Ficha f : fichasComb) {
-    //  Iterator<Ficha> iterador = fichas.iterator();
-//
-    //  while (iterador.hasNext()) {
-    //    Ficha ficha = iterador.next();
-    //    if (ficha.getId() == f.getId()) {
-    //      iterador.remove();
-    //    }
-    //  }
-    //}
   }
 }

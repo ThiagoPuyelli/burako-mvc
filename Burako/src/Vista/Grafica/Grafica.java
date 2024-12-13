@@ -21,7 +21,6 @@ public class Grafica extends VistaPlay implements IVista, MouseListener {
         @Override
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
-            // Dibujar la imagen de fondo
             g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
         }
     };
@@ -73,7 +72,6 @@ public class Grafica extends VistaPlay implements IVista, MouseListener {
         panel.add(combinaciones, BorderLayout.EAST);
         panel.add(combinacionesContrario, BorderLayout.WEST);
         panel.add(pozoGrafica, BorderLayout.CENTER);
-        //panel.add(hacerCombinacion, BorderLayout.NORTH);
         panel.add(botones,BorderLayout.NORTH);
 
         hacerCombinacion.addActionListener(new ActionListener() {
@@ -132,7 +130,6 @@ public class Grafica extends VistaPlay implements IVista, MouseListener {
     }
 
     public void iniciarControlador () {
-        //controlador.conectarJugador();
         controlador.iniciarPartida();
     }
 
@@ -257,7 +254,6 @@ public class Grafica extends VistaPlay implements IVista, MouseListener {
     }
 
     public void agarrarDelPozo () {
-        System.out.println(controlador.getEstadoTurno() + " DALE TROLINGAS");
         if (controlador.getEstadoTurno() == 2) {
             controlador.agarrarPozo();
             mostrarFichas();
@@ -281,7 +277,9 @@ public class Grafica extends VistaPlay implements IVista, MouseListener {
     public void terminarPartida() {
         panel.setVisible(false);
         terminaPartida = true;
+        panelTerminar.setTextoLabel("Partida finalizada ganador/es: " + controlador.getGanador());
         cardLayout.show(panelPrincipal, "panelTerminar");
+        controlador.limpiarPartida();
     }
 
     @Override

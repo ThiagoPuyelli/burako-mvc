@@ -42,7 +42,6 @@ public class ConsoleGUI extends VistaPlay implements IVista  {
         JPanel panel = new JPanel();
         panel.add(inputField);
         panel.add(sendButton);
-        System.out.println("GHOLA " + controlador);
 
         frame.add(scrollPane, BorderLayout.CENTER);
         frame.add(panel, BorderLayout.SOUTH);
@@ -57,15 +56,6 @@ public class ConsoleGUI extends VistaPlay implements IVista  {
                 String inputText = inputField.getText();
                 if (!terminaPartida && inicioPartida) {
                     inputs.get(0).ejecutarComando(inputText);
-                    //if (inputText.startsWith("agarrar")) {
-                    //    agarrarDelMazo(inputText);
-                    //} else if (inputText.startsWith("soltar")) {
-                    //    soltarFicha(inputText);
-                    //} else if (inputText.startsWith("combinacion")) {
-                    //    combinarFichas(inputText);
-                    //} else if (inputText.startsWith("agregar")) {
-                    //    agregarFicha(inputText);
-                    //}
                 }
                 inputField.setText("");
             }
@@ -128,12 +118,11 @@ public class ConsoleGUI extends VistaPlay implements IVista  {
     public void terminarPartida () {
         terminaPartida = true;
         textPane.setText("Partida finalizada ganador: " + controlador.getGanador());
+        controlador.limpiarPartida();
     }
 
     public void mostrarTurno (String nombre) {
-        System.out.println("DALEEE");
         vaciarContenido();
-        //agregarTexto("Jugador " + controlador.getNombre() + "\n", Color.BLACK);
         mostrarJugadores();
         agregarTexto("Turno de " + nombre, Color.BLACK);
         int estadoTurno = controlador.getEstadoTurno(nombre);
@@ -143,7 +132,6 @@ public class ConsoleGUI extends VistaPlay implements IVista  {
             agregarTexto(" juega", Color.BLACK);
         }
         agregarTexto("\n", Color.BLACK);
-        System.out.println("DALEEE 2");
     }
 
     private void mostrarJugadores () {
@@ -166,10 +154,7 @@ public class ConsoleGUI extends VistaPlay implements IVista  {
     public void mostrarFichas () {
         agregarTexto("Fichas: ", Color.BLACK);
         int i = 1;
-        System.out.println("SOY GAY");
-        System.out.println(controlador.getFichas());
         for (IFicha f : controlador.getFichas()) {
-            //agregarTexto(i + ". ", Color.LIGHT_GRAY);
             mostrarFicha(f);
             i++;
         }
@@ -245,12 +230,6 @@ public class ConsoleGUI extends VistaPlay implements IVista  {
 
             if (("RNGV").indexOf(color) != -1) {
                 ColorFicha colorFicha = generarColorFicha(color);
-                System.out.println(colorFicha + " " + numero + " ");
-                String s = "";
-                for (IFicha f : fichas) {
-                    System.out.print(f.getNumero() + " " + f.getColor() + "\n");
-                }
-                System.out.print("\n");
                 int posicion = IntStream.range(0, fichas.size())
                         .filter(i -> fichas.get(i).getColor() == colorFicha && fichas.get(i).getNumero() == numero && (posiciones == null || !posiciones.contains(i))) // Cambia la condición según tus necesidades
                         .findFirst()

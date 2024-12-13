@@ -115,10 +115,7 @@ public class Tablero extends ObservableRemoto implements ITablero, Serializable 
   }
 
   public void iniciarPartida () throws RemoteException {
-    System.out.println("ANTES " + equipo1 + " " + equipo2 + " " + turno + " " + mazo + " " + pozo);
-    System.out.println(equipo1.lleno() + " " + equipo2.lleno());
     if (equipo1.lleno() && equipo2.lleno() && !partidaIniciada) {
-      System.out.println(equipo1.listarJugadores() + " : " + equipo2.listarJugadores());
       partidaIniciada = true;
       this.elegirTurno();
       equipo1.asignarFichas();
@@ -167,8 +164,6 @@ public class Tablero extends ObservableRemoto implements ITablero, Serializable 
   }
 
   private void persistirPartida () {
-    System.out.println(equipo1 + " " + equipo1);
-    System.out.println(mazo + " " + pozo + " " + equipo1.generarEquipoScheme() + " " + equipo2.generarEquipoScheme() + " " + turno + " " + ganador + " " + jugadoresDesconectados);
     PartidaSerializador.cargarPartida(new TableroScheme(mazo, pozo, equipo1.generarEquipoScheme(), equipo2.generarEquipoScheme(), turno, ganador, jugadoresDesconectados));
   }
 
@@ -183,9 +178,8 @@ public class Tablero extends ObservableRemoto implements ITablero, Serializable 
 
   public void elegirPartida (int posTablero) throws RemoteException {
     ArrayList<TableroScheme> tableros = PartidaSerializador.obtenerTableros();
-    System.out.println("CAntidad de tableros: " + tableros.size());
     TableroScheme t = tableros.get(posTablero);
-    PartidaSerializador.eliminarPartida(posTablero);
+    PartidaSerializador.eliminarPartida();
     EquipoScheme equipoScheme1 = t.getEquipo1();
     EquipoScheme equipoScheme2 = t.getEquipo2();
 
@@ -283,7 +277,6 @@ public class Tablero extends ObservableRemoto implements ITablero, Serializable 
     if (jugador == null) {
       jugador = equipo2.getJugador(nombre);
     }
-    //System.out.println("Momento get Jugador " + jugador.getNombre());
     return jugador;
   }
 
@@ -378,7 +371,7 @@ public class Tablero extends ObservableRemoto implements ITablero, Serializable 
     return ganador;
   }
 
-  public void limpiarPartidas () throws RemoteException {
-    PartidaSerializador.eliminarPartida(0);
+  public void limpiarPartida () throws RemoteException {
+    PartidaSerializador.eliminarPartida();
   }
 }

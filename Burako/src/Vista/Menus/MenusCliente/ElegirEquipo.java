@@ -14,12 +14,10 @@ public class ElegirEquipo extends JFrame {
     private JButton boton3;
 
     public ElegirEquipo(Controlador controlador) {
-        // Configuración de la ventana
         setSize(300, 150);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        // Crear componentes
 
         if (controlador.equipo1Lleno() && controlador.equipo2Lleno()) {
             label = new JLabel("           Los equipos estan llenos");
@@ -31,7 +29,6 @@ public class ElegirEquipo extends JFrame {
         boton1 = new JButton("Equipo 1");
         boton2 = new JButton("Equipo 2");
 
-        // Configurar diseño
         setLayout(new BorderLayout());
         add(label, BorderLayout.CENTER);
 
@@ -41,13 +38,11 @@ public class ElegirEquipo extends JFrame {
 
         add(panelBotones, BorderLayout.SOUTH);
 
-        // Configurar acciones de los botones
         boton1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 setVisible(false);
                 controlador.setEquipo(1);
-                //controlador.conectarJugador();
                 ElegirVista elegirVista = new ElegirVista(controlador);
                 elegirVista.setVisible(true);
             }
@@ -59,7 +54,6 @@ public class ElegirEquipo extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 setVisible(false);
                 controlador.setEquipo(2);
-                //controlador.conectarJugador();
                 ElegirVista elegirVista = new ElegirVista(controlador);
                 elegirVista.setVisible(true);
             }
