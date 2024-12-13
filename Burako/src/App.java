@@ -1,6 +1,4 @@
 
-import Vista.Menus.MenusCliente.MenuCliente;
-import Vista.Menus.MenusServidor.MenuServidor;
 
 public class App {
     public static void main(String[] args) {

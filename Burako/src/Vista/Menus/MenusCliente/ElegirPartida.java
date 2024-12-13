@@ -23,8 +23,8 @@ public class ElegirPartida extends JFrame {
         add(label, BorderLayout.CENTER);
 
         JPanel panelBotones = new JPanel();
-        panelBotones.setLayout(new BoxLayout(panelBotones, BoxLayout.Y_AXIS));
-        panelBotones.setAlignmentX(SwingConstants.CENTER);
+        //panelBotones.setLayout(new BoxLayout(panelBotones, BoxLayout.Y_AXIS));
+        //panelBotones.setAlignmentX(SwingConstants.CENTER);
         JButton nuevaPartida = new JButton();
         nuevaPartida.setText("Nueva partida");
         nuevaPartida.addActionListener(e -> {
@@ -38,12 +38,10 @@ public class ElegirPartida extends JFrame {
         partidas = controlador.obtenerPartidas();
         for (TableroScheme t : partidas) {
             JButton botonPartida = new JButton();
-            botonPartida.setText("Partida " + i);
+            botonPartida.setText("Cargar partida");
             botonPartida.addActionListener(e -> {
                 setVisible(false);
-                JButton b = (JButton) e.getSource();
-                int pos = Character.getNumericValue(b.getText().charAt(b.getText().length() - 1));
-                controlador.elegirPartida(pos - 1);
+                controlador.elegirPartida(0);
                 ElegirVista elegirVista = new ElegirVista(controlador);
                 elegirVista.setVisible(true);
             });

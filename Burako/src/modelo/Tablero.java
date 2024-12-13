@@ -15,7 +15,7 @@ public class Tablero extends ObservableRemoto implements ITablero, Serializable 
   private static final long serialVersionUID = 463107072063859071L;
   private Mazo mazo;
   private Pozo pozo = new Pozo();
-  private final int LIMITE = 150;
+  private final int LIMITE = 30;
   private Equipo equipo1;
   private Equipo equipo2;
   private String turno;

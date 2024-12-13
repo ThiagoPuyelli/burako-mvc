@@ -10,6 +10,7 @@ public class PanelMensaje extends JPanel {
     public PanelMensaje (String mensaje) {
         setLayout(new BorderLayout());
         label = new JLabel(mensaje, SwingConstants.CENTER);
+        label.setForeground(Color.WHITE);
         this.add(label);
         add(label, BorderLayout.CENTER);
     }
